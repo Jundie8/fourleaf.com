@@ -224,7 +224,14 @@ code { font-size: .9em; background: var(--surface); padding: .1em .35em; border-
   .chip::after { left: calc(.55rem + 1.5px); margin-top: -.525rem; }
 }
 
-.dishes { list-style: none; margin: .4rem 0 0; padding: 0; }
+.dishes { position: relative; list-style: none; margin: .4rem 0 0; padding: 0; }
+/* the scan-and-sort reveal (site.js adds .waiting / .pending / .scanning) */
+.dishes .tag { transition: opacity .3s, transform .45s var(--spring); }
+.dishes li.pending .lf { background: var(--rule); }
+.dishes li.pending .tag { opacity: 0; transform: scale(.7); }
+.dishes li.pending .ings .hit { text-decoration-color: transparent; }
+.dishes.scanning::after { content: ""; position: absolute; left: -.4rem; right: -.4rem; top: 0; height: 3px; border-radius: 3px; background: linear-gradient(90deg, transparent, var(--green) 20%, var(--green) 80%, transparent); box-shadow: 0 0 14px 1px var(--green); pointer-events: none; animation: scan 1.3s linear forwards; }
+@keyframes scan { from { top: 0; opacity: 1; } 90% { opacity: 1; } to { top: 100%; opacity: 0; } }
 .dishes li { position: relative; display: grid; grid-template-columns: 1.1rem 1fr auto; column-gap: .7rem; align-items: start; margin: 0; padding: .8rem 0; border-top: 1px solid var(--rule); background: var(--raised); transition: color .25s; }
 .dishes .lf { width: .8rem; height: .8rem; margin: .4rem 0 0 .15rem; border-radius: 50%; background: var(--go); transition: background-color .25s; }
 .dishes b { display: block; font-weight: 700; line-height: 1.3; }

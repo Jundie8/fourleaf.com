@@ -168,7 +168,32 @@
       status.textContent = `${count.go} greenlit, ${count.ask} ask first, ${count.stop} skip.`;
     }
 
+    // When the demo first scrolls into view, a scan line sweeps down the list and each
+    // dish lights up with its verdict as it passes. Skipped when motion is reduced.
+    let settle = () => {};
+    if (!calm() && 'IntersectionObserver' in window) {
+      const SWEEP = 1300;
+      const dishes = [...list.children];
+      let timers = [];
+      list.classList.add('waiting');
+      dishes.forEach(li => li.classList.add('pending'));
+      settle = () => {
+        timers.forEach(clearTimeout);
+        timers = [];
+        list.classList.remove('waiting', 'scanning');
+        dishes.forEach(li => li.classList.remove('pending'));
+      };
+      new IntersectionObserver((entries, io) => {
+        if (!entries.some(e => e.isIntersecting)) return;
+        io.disconnect();
+        list.classList.add('scanning');
+        dishes.forEach((li, i) => timers.push(setTimeout(() => li.classList.remove('pending'), 150 + (SWEEP * (i + 0.5)) / dishes.length)));
+        timers.push(setTimeout(settle, SWEEP + 400));
+      }, { threshold: 0.4 }).observe(list);
+    }
+
     chips.forEach(c => c.addEventListener('click', () => {
+      settle(); // a tap during the sweep finishes it straight away
       c.setAttribute('aria-pressed', c.getAttribute('aria-pressed') === 'true' ? 'false' : 'true');
       sort(true);
     }));
