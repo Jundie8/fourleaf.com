@@ -151,6 +151,10 @@ code { font-size: .9em; background: var(--surface); padding: .1em .35em; border-
 .arrow { display: inline-block; transition: transform .3s var(--spring); }
 a:hover > .arrow, .card:hover .arrow { transform: translateX(4px); }
 
+.app-icon { display: block; border-radius: 22.37%; box-shadow: 0 1px 2px rgba(0, 0, 0, .12), 0 14px 26px -12px rgba(4, 120, 87, .55); }
+.hero > .app-icon { margin: 0 auto 1.25rem; }
+.cap-1 .app-icon { flex: none; width: 56px; height: 56px; margin-top: .15rem; }
+
 /* ---- home: the clover ------------------------------------------------ */
 .hero { text-align: center; }
 .hero .lede { margin-inline: auto; }
@@ -178,14 +182,16 @@ a:hover > .arrow, .card:hover .arrow { transform: translateX(4px); }
 
 .slot { width: 100%; max-width: 27rem; min-height: 8.25rem; display: grid; align-content: center; text-align: left; position: relative; }
 .slot .cap { display: none; }
-.slot .cap-1 { display: block; }
+.slot .cap-1 { display: grid; }
 @supports selector(:has(*)) {
   .slot .cap { display: none; }
   .clover:has(#lf1:checked) .cap-1,
   .clover:has(#lf2:checked) .cap-2,
   .clover:has(#lf3:checked) .cap-3,
   .clover:has(#lf4:checked) .cap-4 { display: block; }
+  .clover:has(#lf1:checked) .cap-1 { display: grid; }
 }
+.cap-1 { grid-template-columns: 56px 1fr; gap: 1rem; align-items: start; }
 .cap h2 { display: flex; flex-wrap: wrap; align-items: center; gap: .3rem .75rem; margin: 0 0 .35rem; font-size: 1.3rem; }
 .cap p { margin: .25rem 0; }
 .cap-soft { text-align: center; color: var(--muted); }
@@ -200,15 +206,8 @@ a:hover > .arrow, .card:hover .arrow { transform: translateX(4px); }
 .hello { text-align: center; margin: clamp(2rem, 6vw, 3rem) 0 0; color: var(--muted); }
 
 /* ---- greenlit: three dots, the demo, the steps ------------------------ */
-.center { text-align: center; }
-.center .lede { margin-inline: auto; }
-.lights { display: inline-flex; gap: .45rem; vertical-align: middle; margin-left: .5rem; }
-.lights i { width: .55rem; height: .55rem; border-radius: 50%; }
-.lights i:nth-child(1) { background: var(--go); }
-.lights i:nth-child(2) { background: var(--ask); }
-.lights i:nth-child(3) { background: var(--stop); }
 
-.demo { max-width: 36rem; margin: clamp(2rem, 6vw, 3rem) auto 0; padding: 1rem 1rem .9rem; text-align: left; }
+.demo { max-width: 38rem; margin: clamp(2rem, 6vw, 3rem) auto 0; padding: 1rem 1rem .9rem; text-align: left; }
 .demo-label { margin: 0 0 .6rem; font-size: .78rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
 .js-only { display: none; }
 .js .js-only { display: inline; }
@@ -223,6 +222,13 @@ a:hover > .arrow, .card:hover .arrow { transform: translateX(4px); }
 .chip[aria-pressed="true"] { background: var(--tint); border-color: var(--green); }
 .chip[aria-pressed="true"]::before { background: var(--green); border-color: var(--green); }
 .chip[aria-pressed="true"]::after { transform: scale(1); }
+
+@media (max-width: 26rem) {
+  .chips { gap: .4rem; }
+  .chip { gap: .4rem; padding: 0 .65rem 0 .55rem; font-size: .875rem; }
+  .chip::before, .chip::after { width: 1.05rem; height: 1.05rem; }
+  .chip::after { left: calc(.55rem + 1.5px); margin-top: -.525rem; }
+}
 
 .dishes { list-style: none; margin: .4rem 0 0; padding: 0; }
 .dishes li { position: relative; display: grid; grid-template-columns: 1.1rem 1fr auto; column-gap: .7rem; align-items: start; margin: 0; padding: .8rem 0; border-top: 1px solid var(--rule); background: var(--raised); transition: color .25s; }
@@ -259,7 +265,7 @@ a:hover > .arrow, .card:hover .arrow { transform: translateX(4px); }
 .faq details { border-bottom: 1px solid var(--rule); }
 .faq summary { display: flex; align-items: center; gap: .85rem; min-height: 56px; padding: .6rem 0; cursor: pointer; font-weight: 650; list-style: none; }
 .faq summary::-webkit-details-marker { display: none; }
-.faq summary::before { content: ""; flex: none; width: 1.1rem; height: 1.1rem; background: var(--ghost); -webkit-mask: var(--clover) center / contain no-repeat; mask: var(--clover) center / contain no-repeat; transform: scale(.85); transition: transform .45s var(--spring), background-color .2s; }
+.faq summary::before { content: ""; flex: none; width: 1.1rem; height: 1.1rem; background: var(--edge); -webkit-mask: var(--clover) center / contain no-repeat; mask: var(--clover) center / contain no-repeat; transform: scale(.85); transition: transform .45s var(--spring), background-color .2s; }
 .faq details[open] summary::before { background: var(--green); transform: rotate(45deg) scale(1.05); }
 .faq summary:hover { color: var(--green-deep); }
 @media (prefers-color-scheme: dark) { .faq summary:hover { color: var(--green); } }
@@ -329,7 +335,6 @@ th { font-weight: 700; font-size: .82rem; letter-spacing: .06em; text-transform:
 @keyframes bloom { from { opacity: 0; transform: rotate(var(--r)) translateY(0) scale(.1); } }
 @keyframes sway { 0%, 100% { transform: rotate(-2.5deg); } 50% { transform: rotate(2.5deg); } }
 @keyframes nudge { 45% { transform: rotate(var(--r)) translateY(-9px) scale(1.58); } }
-@keyframes pulse { 40% { transform: scale(1.9); } }
 @keyframes wiggle { 25% { transform: rotate(-12deg) scale(.9); } 75% { transform: rotate(12deg) scale(.9); } }
 @media (prefers-reduced-motion: no-preference) {
   html { scroll-behavior: smooth; }
@@ -339,10 +344,7 @@ th { font-weight: 700; font-size: .82rem; letter-spacing: .06em; text-transform:
   .lg { animation: bloom .8s var(--spring) calc(var(--i, 0) * 110ms + 150ms) backwards; }
   /* once the clover has bloomed, the empty leaves wave hello so touch users know they can be tapped */
   .clover-box label:nth-of-type(n+2) .lg { animation: bloom .8s var(--spring) calc(var(--i, 0) * 110ms + 150ms) backwards, nudge .8s ease-in-out calc(2.4s + var(--i, 0) * 160ms) 1; }
-  .lights i { animation: pulse .6s var(--spring) 1 backwards; }
-  .lights i:nth-child(1) { animation-delay: .5s; }
-  .lights i:nth-child(2) { animation-delay: .65s; }
-  .lights i:nth-child(3) { animation-delay: .8s; }
+
   .clover-box { animation: sway 8s ease-in-out 1.4s infinite; transform-origin: 50% 42%; }
   .patch-grid .miss { animation: wiggle .4s; }
   .slot .cap { animation: rise .4s var(--ease); }
