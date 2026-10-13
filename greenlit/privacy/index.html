@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Greenlit Privacy Policy</title>
+<meta name="description" content="What Greenlit keeps on your phone, what leaves it, and who receives it.">
+<meta name="theme-color" content="#047857">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header class="site-header"><div class="wrap">
+  <a class="brand" href="/"><img src="/favicon.svg" width="28" height="28" alt="">Four Leaf</a>
+  <nav aria-label="Main"><a href="/greenlit/">Greenlit</a><a href="/greenlit/support/">Support</a></nav>
+</div></header>
+
+<main class="wrap">
+  <p class="eyebrow">Greenlit</p>
+  <h1>Privacy Policy</h1>
+  <p class="updated">Last updated 13 October 2026</p>
+
+  <p class="lede">Greenlit reads restaurant menus and sorts the dishes against your diet. The personal part, your diets, allergies and the foods you avoid, is worked out on your phone and never sent to us. This page explains exactly what does leave your device, and why.</p>
+
+  <div class="callout">
+    <p><strong>The short version.</strong></p>
+    <ul>
+      <li>Your diets, allergies, food preferences and scan history stay on your phone.</li>
+      <li>When you scan a menu, the photos are sent to our server and on to OpenAI so the menu can be read. We don’t keep the photos.</li>
+      <li>We collect basic usage and crash data, tied to a random ID on your device rather than to your name. There are no accounts.</li>
+      <li>No ads, no tracking across other companies’ apps or websites, and we don’t sell your data.</li>
+    </ul>
+  </div>
+
+  <h2>Who we are</h2>
+  <p>Greenlit is made by LEGAL_ENTITY_TBD, trading as Four Leaf (“we”, “us”). For any privacy question, or to use a right described below, write to <a href="mailto:support@tryfourleaf.com">support@tryfourleaf.com</a>.</p>
+
+  <h2>What stays on your device</h2>
+  <p>This is stored on your iPhone and is not sent to us or anyone else:</p>
+  <ul>
+    <li><strong>Your diet profile:</strong> the diets you follow, the allergies you flag, your avoid list, and the foods you mark as loved or disliked.</li>
+    <li><strong>Your scan history:</strong> the menus you’ve scanned, kept until you clear them (up to 50 menus), and your running totals.</li>
+    <li><strong>Menu photos:</strong> the photos behind your recent scans are kept on your phone for up to 28 days, for your 20 most recent scans, so you can check a menu against the original. They are excluded from iCloud backups.</li>
+    <li><strong>Your settings,</strong> such as appearance.</li>
+    <li><strong>A random install ID and a queue of usage events</strong> waiting to be sent (see below).</li>
+  </ul>
+  <p>An allergy list says something about your body. That is why Greenlit works the way it does: the app decides which dishes suit you by running rules on your phone against the menu text, rather than sending your profile to a server.</p>
+  <p>You can delete this data yourself. <strong>Settings → Clear Scan History</strong> removes saved menus and menu photos immediately. <strong>Settings → Reset Profile</strong> clears your diets, allergies and preferences. Deleting the app removes everything stored on the device.</p>
+
+  <h2>What leaves your device</h2>
+
+  <h3>Menu photos</h3>
+  <p>When you scan a menu, the photos are sent over an encrypted connection to our scanning service, which forwards them to <a href="https://openai.com/" rel="noopener">OpenAI</a> to be read and turned into structured menu data. Photos you share into Greenlit from other apps are handled the same way. Before upload, each photo is resized and re-encoded, which removes metadata such as the time and location a photo was taken.</p>
+  <ul>
+    <li>The request contains the photos only. It does <strong>not</strong> contain your diets, allergies, preferences, name, email or location.</li>
+    <li>We don’t store the photos. The extracted menu goes back to your phone and isn’t saved on our servers. We only log that a scan happened, as described under usage data below.</li>
+    <li>OpenAI handles what it receives under its own API terms and data controls (see its <a href="https://platform.openai.com/docs/guides/your-data" rel="noopener">data usage page</a>). It may keep API inputs for a limited period under those terms. OpenAI states that data sent through its API is not used to train its models by default.</li>
+  </ul>
+
+  <h3>Usage and crash data</h3>
+  <p>The app sends basic events to our own database, hosted by Supabase: which screens are opened, which buttons are tapped, when the app is opened or sent to the background, whether a scan completed or failed (and the kind of failure, and how many dishes it found), and crash diagnostics delivered by iOS. Each event carries your iPhone model, iOS version, app version, a random session ID, and a random install ID.</p>
+  <ul>
+    <li>The install ID is a random code generated the first time you open the app. It isn’t linked to your name, email, Apple ID or advertising identifier. Deleting the app removes it, and a fresh install creates a new one.</li>
+    <li>We use these events to keep the app reliable, fix bugs, and decide what to build. We use no third-party analytics or advertising service.</li>
+    <li>Right now there is no switch inside the app to turn this collection off.</li>
+  </ul>
+
+  <h3>Restaurant name search</h3>
+  <p>When you name a menu or look for a restaurant, the text you type may be sent to Apple’s Maps search to suggest matching places. We don’t send your location, and the app doesn’t request it. Apple handles that search under <a href="https://www.apple.com/legal/privacy/" rel="noopener">its privacy policy</a>.</p>
+
+  <h3>Your IP address</h3>
+  <p>Our scanning service sees the IP address your request comes from, as any internet service does. We use it to enforce a limit on scans per hour, so the service can’t be run up by abuse. For this the address is held in a short-lived counter alongside your install ID and removed during routine cleanup, typically within a few hours of inactivity. It isn’t joined to your scans or your usage events, and it isn’t shared. Our hosting provider may also keep its own standard infrastructure logs.</p>
+
+  <h2>What we don’t do</h2>
+  <ul>
+    <li><strong>No accounts.</strong> This version doesn’t ask you to sign in, and we collect no name or email address.</li>
+    <li><strong>No location.</strong> The app doesn’t request or use your location.</li>
+    <li><strong>No advertising and no cross-app tracking.</strong> There is no ad network or attribution service in the app. Nothing about you is combined with data from other companies’ apps or websites, so the app doesn’t ask for App Tracking Transparency permission.</li>
+    <li><strong>No sale or sharing.</strong> We don’t sell your information or share it for cross-context behavioural advertising, as those terms are used in California law, and we don’t sell data to brokers.</li>
+  </ul>
+
+  <h2>Who receives data</h2>
+  <div class="table-scroll">
+  <table>
+    <thead><tr><th>Provider</th><th>What it receives</th><th>Why</th></tr></thead>
+    <tbody>
+      <tr><td>Supabase</td><td>Menu photos in transit; usage and crash events; IP addresses</td><td>Hosts the scanning service and our analytics database</td></tr>
+      <tr><td>OpenAI</td><td>Menu photos</td><td>Reads the menu from the photos</td></tr>
+      <tr><td>Apple</td><td>Restaurant name searches; App Store distribution</td><td>Suggests matching restaurants; delivers the app</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h2>How long things are kept</h2>
+  <ul>
+    <li><strong>Menu photos on our servers:</strong> not retained. Retention by OpenAI follows its own terms.</li>
+    <li><strong>Usage and crash events:</strong> kept for as long as they help us understand and improve the app. We don’t yet apply an automatic deletion schedule.</li>
+    <li><strong>Scan-limit counters (including IP addresses):</strong> typically hours.</li>
+    <li><strong>On your device:</strong> as described above, or until you delete them or the app.</li>
+  </ul>
+
+  <h2>Your choices and rights</h2>
+  <ul>
+    <li><strong>Delete local data</strong> with Clear Scan History and Reset Profile, or by deleting the app.</li>
+    <li><strong>Revoke camera or photo access</strong> any time in iOS Settings. The app uses them only to capture or select menu photos.</li>
+    <li><strong>Access, correction, deletion.</strong> Depending on where you live, you may have rights over your personal information, for example under the GDPR or UK GDPR (access, rectification, erasure, restriction, portability, objection) or under California and other US state privacy laws. We hold no name or email for you, so we can usually act on data only if it can be tied to your install ID, which the app doesn’t yet display. Write to <a href="mailto:support@tryfourleaf.com">support@tryfourleaf.com</a> and we’ll help where we reasonably can, and respond within 30 days.</li>
+    <li>Where the GDPR applies, our legal basis for reading menu photos is performance of the service you asked for, and for usage events and scan limiting it is our legitimate interest in keeping the app reliable and affordable to run. You may object, and you may complain to your local data protection authority.</li>
+  </ul>
+
+  <h2>Children</h2>
+  <p>Greenlit is not directed to children under 13, and we don’t knowingly collect personal information from them.</p>
+
+  <h2>International transfers</h2>
+  <p>Our service providers process data in the United States. If you use the app elsewhere, the menu photos you scan and your usage events will be processed there.</p>
+
+  <h2>Security</h2>
+  <p>Traffic between the app and our service is encrypted in transit. Access to our servers is restricted, and the app can add usage events to our analytics table but cannot read or change what is already stored in it.</p>
+
+  <h2>Changes to this policy</h2>
+  <p>If we change what the app collects, we’ll update this page and the date above before the change ships. Material changes, such as adding accounts or collecting location, will be described here explicitly.</p>
+
+  <h2>Contact</h2>
+  <p><a href="mailto:support@tryfourleaf.com">support@tryfourleaf.com</a></p>
+
+  <p style="margin-top:2.2rem"><a href="/greenlit/terms/">Terms of Use</a> · <a href="/greenlit/support/">Support</a></p>
+</main>
+
+<footer class="site-footer"><div class="wrap">
+  <p><a href="/greenlit/">Greenlit</a><a href="/greenlit/support/">Support</a><a href="/greenlit/privacy/">Privacy</a><a href="/greenlit/terms/">Terms</a></p>
+  <p>© 2026 Four Leaf</p>
+</div></footer>
+</body>
+</html>

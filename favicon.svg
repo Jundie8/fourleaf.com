@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <path id="leaf" d="M0 0 C-2 -4 -14 -12 -14 -22 C-14 -29 -9 -33 -5 -33 C-2 -33 0 -31 0 -28 C0 -31 2 -33 5 -33 C9 -33 14 -29 14 -22 C14 -12 2 -4 0 0 Z"/>
+  </defs>
+  <rect width="100" height="100" rx="22" fill="#047857"/>
+  <g fill="#fff8ec" transform="translate(50 50)">
+    <use href="#leaf" transform="translate(0 -3)"/>
+    <use href="#leaf" transform="rotate(90) translate(0 -3)"/>
+    <use href="#leaf" transform="rotate(180) translate(0 -3)"/>
+    <use href="#leaf" transform="rotate(270) translate(0 -3)"/>
+  </g>
+</svg>
