@@ -148,6 +148,12 @@ code { font-size: .9em; background: var(--surface); padding: .1em .35em; border-
 .button:active { transform: scale(.97); }
 @media (prefers-color-scheme: dark) { .button { background: var(--green); } }
 
+.actions { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 1.5rem; }
+.button.ghost { background: transparent; color: var(--text); border: 1.5px solid var(--edge); cursor: pointer; font: inherit; font-weight: 700; }
+.button.ghost:hover { border-color: var(--green); box-shadow: none; }
+.button.ghost.done { border-color: var(--green); color: var(--green-deep); }
+@media (prefers-color-scheme: dark) { .button.ghost.done { color: var(--green); } }
+
 .arrow { display: inline-block; transition: transform .3s var(--spring); }
 a:hover > .arrow, .card:hover .arrow { transform: translateX(4px); }
 
@@ -349,9 +355,20 @@ th { font-weight: 700; font-size: .82rem; letter-spacing: .06em; text-transform:
   .patch-grid .miss { animation: wiggle .4s; }
   .slot .cap { animation: rise .4s var(--ease); }
   @view-transition { navigation: auto; }
+  .site-header { view-transition-name: site-header; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
+}
+
+/* Windows High Contrast: keep the states that colour alone would carry */
+@media (forced-colors: active) {
+  .chip[aria-pressed="true"] { border-width: 3px; }
+  .chip[aria-pressed="true"]::before { background: Highlight; border-color: Highlight; }
+  .chip[aria-pressed="true"]::after { background: HighlightText; }
+  .dishes .lf, .dishes .tag { forced-color-adjust: none; }
+  .leaf { stroke: CanvasText; }
+  .clover input:checked + svg .leaf, .clover input.live + svg .leaf { fill: Highlight; }
 }
 
 @media print {

@@ -289,6 +289,37 @@
     update();
   }
 
+  /* ---- not everyone has a mail app set up: offer to copy the address --------- */
+  function copyButton(link) {
+    if (!navigator.clipboard) return;
+    const address = link.href.replace(/^mailto:/, '');
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'button ghost';
+    btn.textContent = 'Copy address';
+    const status = document.createElement('span');
+    status.className = 'sr-only';
+    status.setAttribute('role', 'status');
+    link.after(btn, status);
+    let timer = 0;
+    btn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(address);
+        btn.textContent = 'Copied';
+        btn.classList.add('done');
+        status.textContent = 'Address copied to the clipboard';
+      } catch (e) {
+        btn.textContent = 'Press Cmd/Ctrl+C';
+        const range = document.createRange();
+        range.selectNodeContents(link);
+        getSelection().removeAllRanges();
+        getSelection().addRange(range);
+      }
+      clearTimeout(timer);
+      timer = setTimeout(() => { btn.textContent = 'Copy address'; btn.classList.remove('done'); status.textContent = ''; }, 2200);
+    });
+  }
+
   /* ---- small touches ----------------------------------------------------- */
   // A link to #some-question opens that FAQ item.
   function openFromHash() {
@@ -303,6 +334,7 @@
   $$('[data-demo]').forEach(demo);
   $$('.clover').forEach(lean);
   $$('.clover').forEach(ladybug);
+  $$('[data-copy]').forEach(copyButton);
   toTop();
   openFromHash();
 
