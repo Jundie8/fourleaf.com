@@ -193,6 +193,8 @@ a:hover > .arrow, .card:hover .arrow { transform: translateX(4px); }
 .cap-link { display: inline-block; margin-top: .4rem; font-weight: 700; }
 .cap-link::after { content: ""; position: absolute; inset: 0; border-radius: 20px; } /* whole card is the link */
 .slot:focus-within { outline: 3px solid var(--green); outline-offset: 3px; border-radius: 20px; }
+.slot { transition: transform .35s var(--spring), box-shadow .25s; }
+.slot:has(.cap-link:hover) { transform: translateY(-3px); }
 .slot :focus-visible { outline: none; }
 
 .hello { text-align: center; margin: clamp(2rem, 6vw, 3rem) 0 0; color: var(--muted); }
@@ -208,6 +210,9 @@ a:hover > .arrow, .card:hover .arrow { transform: translateX(4px); }
 
 .demo { max-width: 36rem; margin: clamp(2rem, 6vw, 3rem) auto 0; padding: 1rem 1rem .9rem; text-align: left; }
 .demo-label { margin: 0 0 .6rem; font-size: .78rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.js-only { display: none; }
+.js .js-only { display: inline; }
+.js .nojs-only { display: none; }
 .chips { display: none; flex-wrap: wrap; gap: .45rem; margin: 0 0 .4rem; }
 .js .chips { display: flex; }
 .chip { position: relative; display: inline-flex; align-items: center; gap: .5rem; min-height: 44px; padding: 0 .85rem 0 .7rem; border: 1.5px solid var(--rule); border-radius: 999px; background: var(--bg); color: var(--text); font: 600 .95rem/1 var(--font); cursor: pointer; transition: background-color .2s, border-color .2s, transform .3s var(--spring); }
@@ -237,10 +242,11 @@ a:hover > .arrow, .card:hover .arrow { transform: translateX(4px); }
 .dishes [data-state="stop"] b { color: var(--muted); }
 .demo-note { margin: .5rem 0 0; padding-top: .7rem; border-top: 1px solid var(--rule); color: var(--muted); font-size: .84rem; }
 
-.steps { list-style: none; padding: 0; margin: clamp(2.5rem, 7vw, 3.5rem) 0 0; display: grid; gap: 1.5rem; counter-reset: s; }
-.steps li { counter-increment: s; margin: 0; }
-.steps li::before { content: counter(s); display: grid; place-items: center; width: 2rem; height: 2rem; margin-bottom: .6rem; border-radius: 50%; background: var(--tint); color: var(--green-deep); font: 800 .95rem var(--font-display); }
-@media (prefers-color-scheme: dark) { .steps li::before { color: var(--green); } }
+.steps { list-style: none; padding: 0; margin: clamp(2.5rem, 7vw, 3.5rem) 0 0; display: grid; gap: 1.75rem; }
+.steps li { margin: 0; }
+.steps .ico { width: 48px; height: 48px; padding: 11px; margin-bottom: .75rem; border-radius: 50%; background: var(--tint); color: var(--green-deep); transition: transform .5s var(--spring); }
+.steps li:hover .ico { transform: rotate(-8deg) scale(1.08); }
+@media (prefers-color-scheme: dark) { .steps .ico { color: var(--green); } }
 .steps b { display: block; font-family: var(--font-display); font-size: 1.05rem; }
 .steps span { display: block; color: var(--muted); font-size: .95rem; line-height: 1.5; margin-top: .15rem; }
 @media (min-width: 40rem) { .steps { grid-template-columns: repeat(3, 1fr); gap: 2rem; } }
@@ -301,6 +307,14 @@ th { font-weight: 700; font-size: .82rem; letter-spacing: .06em; text-transform:
 .totop .track { stroke: var(--rule); }
 .totop .ring { stroke: var(--green); stroke-linecap: round; stroke-dasharray: 100; stroke-dashoffset: calc(100 - var(--p, 0) * 100); }
 .totop .glyph { width: 20px; height: 20px; background: var(--green); -webkit-mask: var(--clover) center / contain no-repeat; mask: var(--clover) center / contain no-repeat; transform: rotate(calc(var(--p, 0) * 360deg)); }
+
+/* a ladybug that wanders the clover (site.js adds it after a few seconds) */
+.clover-box > .bug { position: absolute; inset: auto; left: 0; top: 0; z-index: 3; width: 18px; height: 23px; margin: -11px 0 0 -9px; translate: var(--x, 0) var(--y, 0); rotate: var(--a, 0deg); opacity: 0; cursor: pointer; transition: translate 2.6s ease-in-out, rotate .6s ease-in-out, opacity .8s; }
+.clover-box > .bug.on { opacity: 1; }
+.clover-box > .bug svg { width: 100%; height: 100%; }
+.clover-box > .bug.walking { animation: crawl .32s ease-in-out infinite; }
+.clover-box > .bug.fly { translate: var(--x) calc(var(--y) - 170px); scale: 2.2; opacity: 0; cursor: default; transition: translate 1.1s cubic-bezier(.5, 0, .9, .5), scale 1.1s, opacity 1s; }
+@keyframes crawl { 50% { scale: 1.1; } }
 
 /* confetti leaves thrown by the patch */
 .spark { position: fixed; z-index: 50; width: 16px; height: 17px; margin: -8px 0 0 -8px; pointer-events: none; background: var(--green); -webkit-mask: var(--leaf) center / contain no-repeat; mask: var(--leaf) center / contain no-repeat; }

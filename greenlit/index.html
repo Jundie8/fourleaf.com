@@ -23,9 +23,9 @@
 <meta property="og:image:alt" content="Greenlit, a dietary menu scanner. Photograph a menu, see what to order, ask about or skip.">
 <meta name="twitter:card" content="summary_large_image">
 <!-- meta:end -->
-<link rel="stylesheet" href="/style.css?v=218b1122">
+<link rel="stylesheet" href="/style.css?v=ccd417e7">
 <script>document.documentElement.classList.add('js')</script>
-<script src="/site.js?v=d61a3a0c" defer></script>
+<script src="/site.js?v=14840276" defer></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -43,7 +43,7 @@
   </div>
 
   <section class="card demo" data-demo aria-labelledby="demo-h">
-    <p class="demo-label" id="demo-h">Try it: pick your diets</p>
+    <p class="demo-label" id="demo-h"><span class="js-only">Try it: pick your diets</span><span class="nojs-only">Example: gluten-free and a nut allergy</span></p>
     <div class="chips" role="group" aria-label="Your diets, allergies and dislikes">
       <button type="button" class="chip" data-diet="vegan" aria-pressed="false">Vegan</button>
       <button type="button" class="chip" data-diet="gf" aria-pressed="true">Gluten-free</button>
@@ -87,9 +87,18 @@
   </section>
 
   <ol class="steps">
-    <li><b>Snap</b><span>Photograph each page, or share menu photos and PDFs in from any app.</span></li>
-    <li><b>Read</b><span>AI turns the menu into dishes and ingredients, even the unprinted ones.</span></li>
-    <li><b>Sort</b><span>Your diets apply on your phone. Change them and every saved menu re-sorts, no rescan.</span></li>
+    <li>
+      <svg class="ico" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10V6a2 2 0 0 1 2-2h4M18 4h4a2 2 0 0 1 2 2v4M24 18v4a2 2 0 0 1-2 2h-4M10 24H6a2 2 0 0 1-2-2v-4"/><circle cx="14" cy="14" r="3.6"/></svg>
+      <b>Snap</b><span>Photograph each page, or share menu photos and PDFs in from any app.</span>
+    </li>
+    <li>
+      <svg class="ico" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="4" width="16" height="20" rx="3"/><path d="M10.5 10h7M10.5 14h7M10.5 18h4"/></svg>
+      <b>Read</b><span>AI turns the menu into dishes and ingredients, even the unprinted ones.</span>
+    </li>
+    <li>
+      <svg class="ico" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="7.5" cy="8" r="2.2" fill="var(--go)" stroke="none"/><path d="M13 8h9"/><circle cx="7.5" cy="14" r="2.2" fill="var(--ask)" stroke="none"/><path d="M13 14h9"/><circle cx="7.5" cy="20" r="2.2" fill="var(--stop)" stroke="none"/><path d="M13 20h6"/></svg>
+      <b>Sort</b><span>Your diets apply on your phone. Change them and every saved menu re-sorts, no rescan.</span>
+    </li>
   </ol>
 
   <section class="promise">

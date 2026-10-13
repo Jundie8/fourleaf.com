@@ -205,6 +205,62 @@
     document.documentElement.addEventListener('mouseleave', rest);
   }
 
+  /* ---- a ladybug wanders the clover; poke it and it flies off --------------- */
+  function ladybug(root) {
+    if (calm()) return;
+    const box = $('.clover-box', root);
+    const bug = document.createElement('i');
+    bug.className = 'bug';
+    bug.setAttribute('aria-hidden', 'true');
+    bug.innerHTML = '<svg viewBox="-10 -13 20 25"><path d="M-2-9L-4-12M2-9L4-12" stroke="#2b2622" stroke-width="1" stroke-linecap="round"/><circle cy="-8" r="3.4" fill="#2b2622"/><ellipse cy="2" rx="7.5" ry="9" fill="#dc2626"/><path d="M0-7V11" stroke="#2b2622" stroke-width="1"/><g fill="#2b2622"><circle cx="-3.6" cy="-1" r="1.5"/><circle cx="3.6" cy="-1" r="1.5"/><circle cx="-3.4" cy="5" r="1.3"/><circle cx="3.4" cy="5" r="1.3"/></g></svg>';
+
+    const spots = [[60, 25], [90, 54], [60, 83], [30, 54]]; // the middle of each leaf, in the clover's 120-unit space
+    const scale = () => box.clientWidth / 120;
+    let x = 60, y = 134, heading = 0, last = -1, timer = 0, gone = false;
+
+    function walkTo(nx, ny) {
+      let a = (Math.atan2(nx - x, -(ny - y)) * 180) / Math.PI;
+      a += 360 * Math.round((heading - a) / 360); // turn the short way round
+      heading = a;
+      bug.style.setProperty('--a', a + 'deg');
+      bug.style.setProperty('--x', nx * scale() + 'px');
+      bug.style.setProperty('--y', ny * scale() + 'px');
+      bug.classList.add('walking');
+      setTimeout(() => bug.classList.remove('walking'), 2600);
+      x = nx;
+      y = ny;
+    }
+
+    function wander() {
+      if (gone) return;
+      if (!document.hidden) {
+        let i;
+        do { i = Math.floor(Math.random() * spots.length); } while (i === last);
+        last = i;
+        walkTo(spots[i][0] + (Math.random() - 0.5) * 8, spots[i][1] + (Math.random() - 0.5) * 8);
+      }
+      timer = setTimeout(wander, 4200 + Math.random() * 3200);
+    }
+
+    bug.addEventListener('click', () => {
+      gone = true;
+      clearTimeout(timer);
+      const r = bug.getBoundingClientRect();
+      burst(r.left + r.width / 2, r.top + r.height / 2);
+      bug.classList.add('fly');
+      setTimeout(() => bug.remove(), 1300);
+    });
+
+    setTimeout(() => {
+      bug.style.setProperty('--x', x * scale() + 'px');
+      bug.style.setProperty('--y', y * scale() + 'px');
+      box.appendChild(bug);
+      bug.getBoundingClientRect(); // settle the start position before it moves
+      bug.classList.add('on');
+      timer = setTimeout(wander, 700);
+    }, 6500);
+  }
+
   /* ---- long pages get a clover that shows reading progress ----------------- */
   function toTop() {
     const doc = document.documentElement;
@@ -246,6 +302,7 @@
   $$('[data-patch]').forEach(patch);
   $$('[data-demo]').forEach(demo);
   $$('.clover').forEach(lean);
+  $$('.clover').forEach(ladybug);
   toTop();
   openFromHash();
 
