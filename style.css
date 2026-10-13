@@ -309,7 +309,7 @@ th { font-weight: 700; font-size: .82rem; letter-spacing: .06em; text-transform:
 .totop .glyph { width: 20px; height: 20px; background: var(--green); -webkit-mask: var(--clover) center / contain no-repeat; mask: var(--clover) center / contain no-repeat; transform: rotate(calc(var(--p, 0) * 360deg)); }
 
 /* a ladybug that wanders the clover (site.js adds it after a few seconds) */
-.clover-box > .bug { position: absolute; inset: auto; left: 0; top: 0; z-index: 3; width: 18px; height: 23px; margin: -11px 0 0 -9px; translate: var(--x, 0) var(--y, 0); rotate: var(--a, 0deg); opacity: 0; cursor: pointer; transition: translate 2.6s ease-in-out, rotate .6s ease-in-out, opacity .8s; }
+.clover-box > .bug { position: absolute; inset: auto; left: 0; top: 0; z-index: 3; width: 21px; height: 26px; margin: -13px 0 0 -10px; translate: var(--x, 0) var(--y, 0); rotate: var(--a, 0deg); opacity: 0; cursor: pointer; transition: translate 2.6s ease-in-out, rotate .6s ease-in-out, opacity .8s; }
 .clover-box > .bug.on { opacity: 1; }
 .clover-box > .bug svg { width: 100%; height: 100%; }
 .clover-box > .bug.walking { animation: crawl .32s ease-in-out infinite; }
