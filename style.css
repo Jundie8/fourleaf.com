@@ -14,12 +14,13 @@
   --muted: #5f6573;
   --rule: #eadfc6;
   --ghost: #cdbf9d;
+  --edge: #948768; /* outlines of controls: 3:1 on the page */
   --green: #059669;
   --green-deep: #047857;
   --on-green: #ffffff;
   --tint: #e2f3e4;
   --go: #059669;
-  --ask: #f59e0b;
+  --ask: #d97706;
   --stop: #dc2626;
   --go-ink: #047857;
   --ask-ink: #92400e;
@@ -49,6 +50,7 @@
     --muted: #aaa59b;
     --rule: #3a362f;
     --ghost: #5d574a;
+    --edge: #7f796c;
     --green: #10b981;
     --green-deep: #10b981;
     --on-green: #052e22;
@@ -80,6 +82,7 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 main { flex: 1; padding-top: clamp(1rem, 4vw, 2.5rem); }
+main:focus { outline: none; }
 a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1px; }
 a:hover { text-decoration-thickness: 2px; }
 :focus-visible { outline: 3px solid var(--green); outline-offset: 3px; border-radius: 6px; }
@@ -118,7 +121,7 @@ h2 { font-size: 1.25rem; font-weight: 750; letter-spacing: -.015em; line-height:
 h3 { font-size: 1.02rem; font-weight: 700; margin: 1.75rem 0 .3rem; }
 p, li { margin: .6rem 0; text-wrap: pretty; }
 ul, ol { padding-left: 1.25rem; }
-.lede { color: var(--muted); font-size: 1.2rem; line-height: 1.5; max-width: 32rem; margin: 1rem 0 0; }
+.lede { color: var(--muted); font-size: 1.2rem; line-height: 1.5; max-width: 32rem; margin: 1rem 0 0; text-wrap: balance; }
 .eyebrow { display: inline-flex; align-items: center; gap: .5rem; margin: 0 0 .9rem; font-size: .78rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--green-deep); }
 .eyebrow::before { content: ""; width: 1rem; height: 1rem; background: currentColor; -webkit-mask: var(--clover) center / contain no-repeat; mask: var(--clover) center / contain no-repeat; }
 @media (prefers-color-scheme: dark) { .eyebrow { color: var(--green); } }
@@ -159,12 +162,12 @@ a:hover > .arrow, .card:hover .arrow { transform: translateX(4px); }
 .clover label svg { width: 100%; height: 100%; overflow: visible; }
 .clover input { position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0; pointer-events: none; }
 
-.lg { --y: -2px; --s: 1.5; transform: rotate(var(--r)) translateY(var(--y)) scale(var(--s)); transition: transform .45s var(--spring); }
+.lg { --y: -2px; --s: 1.5; transform: rotate(var(--r)) translateY(calc(var(--y) + var(--lean, 0px))) scale(var(--s)); transition: transform .45s var(--spring); }
 .lg:hover { --y: -5px; }
 .clover input:checked + svg .lg { --y: -6px; --s: 1.58; }
-.leaf { fill: var(--surface); stroke: var(--ghost); stroke-width: 1.5; stroke-dasharray: 3 3; pointer-events: visiblePainted; cursor: pointer; transition: fill .25s, stroke .25s; }
+.leaf { fill: var(--surface); stroke: var(--edge); stroke-width: 1.5; stroke-dasharray: 3 3; pointer-events: visiblePainted; cursor: pointer; transition: fill .25s, stroke .25s; }
 .lg:hover .leaf { stroke: var(--green); }
-.clover input:checked + svg .leaf { fill: var(--tint); stroke: var(--green); stroke-width: 2; }
+.clover input:checked + svg .leaf { fill: var(--tint); fill: color-mix(in srgb, var(--green) 20%, var(--bg)); stroke: var(--green); stroke-width: 2; stroke-dasharray: none; }
 .clover input.live + svg .leaf { fill: var(--green); stroke: none; }
 .vein { fill: none; stroke: #fff; stroke-width: 1; stroke-linecap: round; opacity: 0; pointer-events: none; transition: opacity .25s; }
 .clover input.live + svg .vein { opacity: .4; }
@@ -200,13 +203,13 @@ a:hover > .arrow, .card:hover .arrow { transform: translateX(4px); }
 .lights i:nth-child(2) { background: var(--ask); }
 .lights i:nth-child(3) { background: var(--stop); }
 
-.demo { max-width: 36rem; margin: clamp(2rem, 6vw, 3rem) auto 0; padding: 1.1rem 1.1rem .9rem; text-align: left; }
+.demo { max-width: 36rem; margin: clamp(2rem, 6vw, 3rem) auto 0; padding: 1rem 1rem .9rem; text-align: left; }
 .demo-label { margin: 0 0 .6rem; font-size: .78rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
-.chips { display: none; flex-wrap: wrap; gap: .5rem; margin: 0 0 .4rem; }
+.chips { display: none; flex-wrap: wrap; gap: .45rem; margin: 0 0 .4rem; }
 .js .chips { display: flex; }
-.chip { position: relative; display: inline-flex; align-items: center; gap: .55rem; min-height: 44px; padding: 0 1rem 0 .8rem; border: 1.5px solid var(--rule); border-radius: 999px; background: var(--bg); color: var(--text); font: 600 .95rem/1 var(--font); cursor: pointer; transition: background-color .2s, border-color .2s, transform .3s var(--spring); }
-.chip::before { content: ""; flex: none; width: 1.15rem; height: 1.15rem; border-radius: 50%; border: 1.5px solid var(--ghost); transition: background-color .2s, border-color .2s; }
-.chip::after { content: ""; position: absolute; left: calc(.8rem + 1.5px); top: 50%; width: 1.15rem; height: 1.15rem; margin: -.575rem 0 0 -1.5px; background: var(--on-green); -webkit-mask: var(--check) center / 78% no-repeat; mask: var(--check) center / 78% no-repeat; transform: scale(0); transition: transform .35s var(--spring); }
+.chip { position: relative; display: inline-flex; align-items: center; gap: .5rem; min-height: 44px; padding: 0 .85rem 0 .7rem; border: 1.5px solid var(--rule); border-radius: 999px; background: var(--bg); color: var(--text); font: 600 .95rem/1 var(--font); cursor: pointer; transition: background-color .2s, border-color .2s, transform .3s var(--spring); }
+.chip::before { content: ""; flex: none; width: 1.15rem; height: 1.15rem; border-radius: 50%; border: 1.5px solid var(--edge); transition: background-color .2s, border-color .2s; }
+.chip::after { content: ""; position: absolute; left: calc(.7rem + 1.5px); top: 50%; width: 1.15rem; height: 1.15rem; margin: -.575rem 0 0 -1.5px; background: var(--on-green); -webkit-mask: var(--check) center / 78% no-repeat; mask: var(--check) center / 78% no-repeat; transform: scale(0); transition: transform .35s var(--spring); }
 .chip:hover { border-color: var(--green); }
 .chip:active { transform: scale(.96); }
 .chip[aria-pressed="true"] { background: var(--tint); border-color: var(--green); }
@@ -274,7 +277,7 @@ th { font-weight: 700; font-size: .82rem; letter-spacing: .06em; text-transform:
 .patch { display: none; margin-top: clamp(3rem, 8vw, 4.5rem); text-align: center; }
 .js .patch { display: block; }
 .patch-grid { display: grid; grid-template-columns: repeat(7, 1fr); max-width: 22rem; margin: 1rem auto 0; }
-.patch-grid button { aspect-ratio: 1; min-height: 44px; padding: 0; border: 0; border-radius: 14px; background: none; color: var(--ghost); cursor: pointer; transition: color .2s, transform .35s var(--spring), opacity .4s; }
+.patch-grid button { aspect-ratio: 1; min-height: 44px; padding: 0; border: 0; border-radius: 14px; background: none; color: var(--edge); color: color-mix(in srgb, var(--green-deep) 70%, var(--bg)); cursor: pointer; transition: color .2s, transform .35s var(--spring), opacity .4s; }
 .patch-grid button:hover { color: var(--green); transform: scale(1.12); }
 .patch-grid svg { width: 76%; height: 76%; margin: auto; fill: currentColor; overflow: visible; }
 .patch-grid .miss { color: var(--rule); transform: scale(.85); pointer-events: none; }
@@ -284,6 +287,17 @@ th { font-weight: 700; font-size: .82rem; letter-spacing: .06em; text-transform:
 .patch-msg strong { color: var(--text); }
 .patch-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: .5rem 1rem; margin-top: .4rem; }
 .linklike { min-height: 44px; padding: 0 .5rem; border: 0; background: none; color: var(--link); font: inherit; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+
+/* ---- back to top: a clover that turns as you read ----------------------- */
+.totop { position: fixed; right: max(1rem, env(safe-area-inset-right)); bottom: max(1rem, env(safe-area-inset-bottom)); z-index: 20; display: grid; place-items: center; width: 52px; height: 52px; padding: 0; border: 0; border-radius: 50%; background: var(--raised); box-shadow: var(--shadow); cursor: pointer; opacity: 0; visibility: hidden; transform: translateY(10px) scale(.9); transition: opacity .25s, transform .4s var(--spring), visibility 0s .4s; }
+.totop.on { opacity: 1; visibility: visible; transform: none; transition: opacity .25s, transform .4s var(--spring), visibility 0s; }
+.totop:hover { transform: scale(1.08); }
+.totop:active { transform: scale(.95); }
+.totop svg { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
+.totop circle { fill: none; stroke-width: 3; }
+.totop .track { stroke: var(--rule); }
+.totop .ring { stroke: var(--green); stroke-linecap: round; stroke-dasharray: 100; stroke-dashoffset: calc(100 - var(--p, 0) * 100); }
+.totop .glyph { width: 20px; height: 20px; background: var(--green); -webkit-mask: var(--clover) center / contain no-repeat; mask: var(--clover) center / contain no-repeat; transform: rotate(calc(var(--p, 0) * 360deg)); }
 
 /* confetti leaves thrown by the patch */
 .spark { position: fixed; z-index: 50; width: 16px; height: 17px; margin: -8px 0 0 -8px; pointer-events: none; background: var(--green); -webkit-mask: var(--leaf) center / contain no-repeat; mask: var(--leaf) center / contain no-repeat; }
@@ -314,6 +328,6 @@ th { font-weight: 700; font-size: .82rem; letter-spacing: .06em; text-transform:
 }
 
 @media print {
-  .site-header nav, .site-footer nav, .patch, .skip { display: none; }
+  .site-header nav, .site-footer nav, .patch, .skip, .totop { display: none; }
   body { background: #fff; color: #000; }
 }

@@ -38,6 +38,14 @@
   }
 
   /* ---- the lucky patch -------------------------------------------------- */
+  // Finding the lucky clover turns the tab icon gold until you play again.
+  const icon = $('link[rel="icon"]');
+  const iconHref = icon && icon.href;
+  const goldIcon = 'data:image/svg+xml,' + encodeURIComponent(
+    `<svg xmlns="${NS}" viewBox="0 0 100 100"><rect width="100" height="100" rx="22" fill="#f59e0b"/><g fill="#fff8ec" transform="translate(50 50)">` +
+    [0, 90, 180, 270].map(r => `<path d="${LEAF}" transform="rotate(${r}) translate(0 -3)"/>`).join('') + '</g></svg>');
+  const lucky = on => { if (icon) icon.href = on ? goldIcon : iconHref; };
+
   function clover(leaves) {
     const svg = document.createElementNS(NS, 'svg');
     svg.setAttribute('viewBox', '-40 -40 80 80');
@@ -71,6 +79,7 @@
       done = false;
       msg.textContent = '';
       again.hidden = true;
+      lucky(false);
       if (home) home.hidden = true;
       for (let i = 0; i < N; i++) {
         const b = document.createElement('button');
@@ -93,6 +102,7 @@
         grid.classList.add('done');
         const r = b.getBoundingClientRect();
         burst(r.left + r.width / 2, r.top + r.height / 2);
+        lucky(true);
         msg.textContent = tries === 1 ? 'First try. Absurdly lucky.' : `Found it in ${tries} tries. Lucky you.`;
         again.hidden = false;
         if (home) home.hidden = false;
@@ -165,6 +175,64 @@
     sort(false);
   }
 
+  /* ---- the hero clover leans toward your cursor --------------------------- */
+  function lean(root) {
+    if (!matchMedia('(pointer: fine)').matches) return;
+    const box = $('.clover-box', root);
+    const leaves = $$('.lg', root);
+    let raf = 0, x = 0, y = 0;
+
+    function apply() {
+      raf = 0;
+      const r = box.getBoundingClientRect();
+      const dx = x - (r.left + r.width / 2);
+      const dy = y - (r.top + r.height * 0.42);
+      const reach = Math.max(0.25, 1 - Math.hypot(dx, dy) / 900); // nearer cursor, stronger lean
+      const toward = Math.atan2(dx, -dy); // 0 = straight up, clockwise
+      leaves.forEach((leaf, i) => {
+        const a = Math.cos(toward - (i * Math.PI) / 2);
+        leaf.style.setProperty('--lean', (-(Math.max(0, a) ** 2) * 6 * reach).toFixed(1) + 'px');
+      });
+    }
+    const rest = () => leaves.forEach(l => l.style.removeProperty('--lean'));
+
+    addEventListener('pointermove', e => {
+      if (calm() || e.pointerType !== 'mouse') return;
+      x = e.clientX;
+      y = e.clientY;
+      raf ||= requestAnimationFrame(apply);
+    }, { passive: true });
+    document.documentElement.addEventListener('mouseleave', rest);
+  }
+
+  /* ---- long pages get a clover that shows reading progress ----------------- */
+  function toTop() {
+    const doc = document.documentElement;
+    if (doc.scrollHeight < innerHeight * 2.2) return;
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'totop';
+    b.setAttribute('aria-label', 'Back to top');
+    b.innerHTML = '<svg viewBox="0 0 44 44" aria-hidden="true"><circle class="track" cx="22" cy="22" r="19"/><circle class="ring" cx="22" cy="22" r="19" pathLength="100"/></svg><i class="glyph"></i>';
+    document.body.appendChild(b);
+
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const max = doc.scrollHeight - innerHeight;
+      b.style.setProperty('--p', max > 0 ? Math.min(1, scrollY / max).toFixed(3) : 0);
+      b.classList.toggle('on', scrollY > 480);
+    };
+    addEventListener('scroll', () => { raf ||= requestAnimationFrame(update); }, { passive: true });
+    addEventListener('resize', update);
+    b.addEventListener('click', () => {
+      scrollTo({ top: 0, behavior: calm() ? 'auto' : 'smooth' });
+      const main = $('main');
+      if (main) main.focus({ preventScroll: true });
+    });
+    update();
+  }
+
   /* ---- small touches ----------------------------------------------------- */
   // A link to #some-question opens that FAQ item.
   function openFromHash() {
@@ -177,6 +245,8 @@
 
   $$('[data-patch]').forEach(patch);
   $$('[data-demo]').forEach(demo);
+  $$('.clover').forEach(lean);
+  toTop();
   openFromHash();
 
   console.log('%c Four Leaf %c small apps, made with care. Found a bug? support@tryfourleaf.com', 'background:#047857;color:#fff;border-radius:6px;padding:2px 6px;font-weight:700', '');
