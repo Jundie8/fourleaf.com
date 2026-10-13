@@ -139,7 +139,7 @@
     const RANK = { go: 0, ask: 1, stop: 2 };
     const chips = $$('[data-diet]', root);
     const list = $('.dishes', root);
-    const rows = $$('li', list); // original menu order, never reassigned
+    const rows = $$('li', list); // data-i is each dish's place on the menu; it breaks ties within a group
     const status = $('.demo-status', root);
 
     function sort(animate) {
@@ -157,7 +157,7 @@
 
       const before = new Map(rows.map(li => [li, li.getBoundingClientRect().top]));
       [...rows]
-        .sort((a, b) => RANK[a.dataset.state] - RANK[b.dataset.state] || rows.indexOf(a) - rows.indexOf(b))
+        .sort((a, b) => RANK[a.dataset.state] - RANK[b.dataset.state] || a.dataset.i - b.dataset.i)
         .forEach(li => list.appendChild(li));
       if (animate && !calm()) {
         rows.forEach(li => {
