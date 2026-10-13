@@ -1,6 +1,8 @@
-/* The lucky meadow: a small game. Needs site.js (loaded first) for the leaf
-   shape and the confetti. Nothing leaves the page; the best score is kept in
-   this browser's localStorage, if it lets us. */
+/* The lucky meadow: a small game with two modes.
+   Endless: rounds that fill up until your luck runs out.
+   Daily: one meadow a day, seeded by the date, with a streak.
+   Needs site.js (loaded first) for the leaf shape and the confetti. Nothing leaves
+   the page; scores are kept in this browser's localStorage, if it lets us. */
 (() => {
   'use strict';
 
@@ -13,35 +15,54 @@
   const el = {
     meadow: $('[data-meadow]'), msg: $('.game-msg'), round: $('[data-round]'), time: $('[data-time]'),
     best: $('[data-best]'), luck: $('[data-luck]'), hint: $('[data-hint]'), next: $('[data-next]'),
-    again: $('[data-again]'), share: $('[data-share]'),
+    again: $('[data-again]'), share: $('[data-share]'), modes: [...root.querySelectorAll('[data-mode]')],
   };
+  const kRound = el.round.previousElementSibling;
+  const kBest = el.best.previousElementSibling;
 
   const MAX_LUCK = 3;
+  const DAILY_ROUND = 4; // the daily meadow is always round-four dense
   const KEY = 'fl-lucky';
-  const rand = (a, b) => a + Math.random() * (b - a);
-  const pick = list => list[Math.floor(Math.random() * list.length)];
+  const DAILY_KEY = 'fl-daily';
+  const LEAVES = { two: 2, three: 3, four: 4, five: 5 };
+
+  /* ---- randomness: the daily meadow is seeded by the date, endless is not ---------- */
+  const seedFrom = str => { let h = 2166136261; for (const ch of str) { h ^= ch.charCodeAt(0); h = Math.imul(h, 16777619); } return h >>> 0; };
+  const mulberry32 = a => () => {
+    a = (a + 0x6D2B79F5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+  let rnd = Math.random;
+  const rand = (a, b) => a + rnd() * (b - a);
+  const pick = list => list[Math.floor(rnd() * list.length)];
+
   const rounds = n => (n === 1 ? '1 round' : `${n} rounds`);
   const leaves = n => (n === 1 ? '1 leaf' : `${n} leaves`);
   const triesOf = n => (n === 1 ? '1 try' : `${n} tries`);
-  const LEAVES = { two: 2, three: 3, four: 4, five: 5 };
+  const daysOf = n => (n === 1 ? '1 day' : `${n} days`);
 
-  /* ---- best score, kept on this device ------------------------------------- */
-  function loadBest() {
-    try { const v = JSON.parse(localStorage.getItem(KEY)); return { round: +v.round || 0, time: +v.time || 0 }; }
-    catch (e) { return { round: 0, time: 0 }; }
-  }
-  function saveBest() { try { localStorage.setItem(KEY, JSON.stringify(best)); } catch (e) { /* private mode: fine */ } }
-  const best = loadBest();
+  /* ---- dates (UTC, so everyone's "today" turns over together) ------------------------ */
+  const dayStr = d => d.toISOString().slice(0, 10);
+  const today = () => dayStr(new Date());
+  const yesterday = () => dayStr(new Date(Date.now() - 864e5));
+  const dateLabel = () => new Date(today() + 'T00:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', timeZone: 'UTC' });
 
-  /* ---- state ---------------------------------------------------------------- */
+  /* ---- scores, kept on this device ----------------------------------------------------- */
+  const read = (key, fallback) => { try { const v = JSON.parse(localStorage.getItem(key)); return v && typeof v === 'object' ? v : fallback; } catch (e) { return fallback; } };
+  const write = (key, value) => { try { localStorage.setItem(key, JSON.stringify(value)); } catch (e) { /* private mode: fine */ } };
+  const best = Object.assign({ round: 0, time: 0 }, read(KEY, {}));
+  let daily = read(DAILY_KEY, null);
+  const streakNow = () => (daily && (daily.lastWin === today() || daily.lastWin === yesterday()) ? daily.streak || 0 : 0);
+  const playedToday = () => !!daily && daily.date === today();
+
+  /* ---- state ---------------------------------------------------------------------------- */
   let s = null;
   let ticker = 0;
+  const fresh = mode => ({ mode, round: mode === 'daily' ? DAILY_ROUND : 1, luck: MAX_LUCK, cleared: 0, over: false });
 
-  function fresh() {
-    return { round: 1, luck: MAX_LUCK, cleared: 0, over: false };
-  }
-
-  /* ---- drawing a clover ------------------------------------------------------ */
+  /* ---- drawing a clover ------------------------------------------------------------------- */
   function cloverSvg(kind) {
     const n = LEAVES[kind];
     const svg = document.createElementNS(NS, 'svg');
@@ -61,9 +82,11 @@
   const columns = () => Math.max(5, Math.floor((el.meadow.clientWidth - 16) / 50));
   const itemsOf = () => [...el.meadow.children].filter(c => c.tagName === 'BUTTON');
   const pos = i => ({ x: i % s.cols, y: Math.floor(i / s.cols) });
+  const say = text => { el.msg.textContent = text; };
 
-  /* ---- a round ---------------------------------------------------------------- */
+  /* ---- a round ------------------------------------------------------------------------------ */
   function newRound() {
+    rnd = s.mode === 'daily' ? mulberry32(seedFrom('fourleaf-' + today())) : Math.random;
     Object.assign(s, { tries: 0, misses: 0, hinted: false, solved: false, lastDist: null, elapsed: 0, last: performance.now(), running: true });
 
     const cols = columns();
@@ -80,11 +103,12 @@
       while (fives.size < want) { const i = Math.floor(rand(0, n)); if (i !== s.target) fives.add(i); }
     }
 
+    el.meadow.hidden = false;
     el.meadow.className = 'meadow';
     el.meadow.style.setProperty('--cols', cols);
     el.meadow.replaceChildren();
     for (let i = 0; i < n; i++) {
-      const kind = i === s.target ? 'four' : fives.has(i) ? 'five' : s.round >= 3 && Math.random() < 0.14 ? 'two' : 'three';
+      const kind = i === s.target ? 'four' : fives.has(i) ? 'five' : s.round >= 3 && rnd() < 0.14 ? 'two' : 'three';
       const b = document.createElement('button');
       b.type = 'button';
       b.dataset.kind = kind;
@@ -105,20 +129,23 @@
     el.hint.disabled = false;
     el.hint.textContent = 'Hint';
     paint();
-    say(s.round === 1 ? 'Find the clover with four leaves.' : `Round ${s.round}. Find the clover with four leaves.`);
+    say(s.mode === 'daily' ? `Today’s meadow, ${dateLabel()}. Find the clover with four leaves.` : s.round === 1 ? 'Find the clover with four leaves.' : `Round ${s.round}. Find the clover with four leaves.`);
     startTicker();
   }
 
   function paint() {
-    el.round.textContent = s.round;
-    el.best.textContent = best.round ? `Round ${best.round}` : '–';
+    const isDaily = s.mode === 'daily';
+    kRound.textContent = isDaily ? 'Daily' : 'Round';
+    el.round.textContent = isDaily ? dateLabel() : s.round;
+    kBest.textContent = isDaily ? 'Streak' : 'Best';
+    el.best.textContent = isDaily ? (streakNow() ? daysOf(streakNow()) : '–') : best.round ? `Round ${best.round}` : '–';
     el.luck.setAttribute('aria-label', `Luck: ${s.luck} of ${MAX_LUCK}`);
     if (!el.luck.children.length) for (let i = 0; i < MAX_LUCK; i++) el.luck.appendChild(document.createElement('i'));
     [...el.luck.children].forEach((leaf, i) => leaf.classList.toggle('lost', i >= s.luck));
+    el.modes.forEach(b => b.setAttribute('aria-pressed', String(b.dataset.mode === s.mode)));
   }
-  const say = text => { el.msg.textContent = text; };
 
-  /* ---- the clock: elapsed only, no limit, paused while the tab is hidden ------- */
+  /* ---- the clock: elapsed only, no limit, paused while the tab is hidden --------------------- */
   function startTicker() {
     clearInterval(ticker);
     ticker = setInterval(() => {
@@ -136,7 +163,7 @@
     el.time.textContent = (s.elapsed / 1000).toFixed(1);
   }
 
-  /* ---- picking ------------------------------------------------------------------ */
+  /* ---- picking -------------------------------------------------------------------------------- */
   el.meadow.addEventListener('click', e => {
     const b = e.target.closest('button');
     if (!b || s.solved || s.over || b.classList.contains('miss')) return;
@@ -145,8 +172,7 @@
   });
 
   function miss(b) {
-    const items = itemsOf();
-    const i = items.indexOf(b);
+    const i = itemsOf().indexOf(b);
     b.classList.add('miss');
     b.setAttribute('aria-label', `Clover ${i + 1}, ${leaves(LEAVES[b.dataset.kind])}`);
     s.misses++;
@@ -179,35 +205,57 @@
     if (!calm() && navigator.vibrate) navigator.vibrate([12, 50, 12]);
     blowAway(b);
 
+    el.hint.hidden = true;
+    el.share.hidden = false;
+
+    if (s.mode === 'daily') {
+      const streak = (daily && daily.lastWin === yesterday() ? daily.streak || 0 : 0) + 1;
+      daily = { date: today(), won: true, tries: s.tries, secs, streak, lastWin: today() };
+      write(DAILY_KEY, daily);
+      s.cleared = 1;
+      paint();
+      say(`${s.tries === 1 ? 'First try! ' : ''}Found today’s clover in ${triesOf(s.tries)}, ${secs.toFixed(1)}s. Streak: ${daysOf(streak)}. A new meadow arrives tomorrow.`);
+      el.again.textContent = 'Play endless';
+      el.again.hidden = false;
+      el.again.focus({ preventScroll: true });
+      return;
+    }
+
     s.cleared = s.round;
     const bits = [];
     bits.push(s.tries === 1 ? `First try! Round ${s.round} cleared in ${secs.toFixed(1)}s.` : `Round ${s.round} cleared in ${triesOf(s.tries)}, ${secs.toFixed(1)}s.`);
     if (s.round > best.round) { best.round = s.round; bits.push('New best round.'); }
     if (!best.time || secs < best.time) { if (best.time) bits.push(`Fastest find yet: ${secs.toFixed(1)}s.`); best.time = secs; }
     if (s.misses === 0 && s.luck < MAX_LUCK) { s.luck++; bits.push('A leaf of luck grew back.'); }
-    saveBest();
+    write(KEY, best);
     paint();
     say(bits.join(' '));
-
-    el.hint.hidden = true;
-    el.next.hidden = el.share.hidden = false;
+    el.next.hidden = false;
     el.next.focus({ preventScroll: true });
   }
 
   function lose() {
     s.over = true;
     stopTicker();
-    const items = itemsOf();
-    const found = items[s.target];
-    found.classList.add('reveal');
+    itemsOf()[s.target].classList.add('reveal');
     el.meadow.classList.add('over');
-    const n = s.round - 1;
-    saveBest();
-    say(n ? `Out of luck. It was hiding right there. You cleared ${rounds(n)}.` : 'Out of luck. It was hiding right there.');
-    s.cleared = n;
     el.hint.hidden = true;
     el.again.hidden = false;
-    el.share.hidden = !n;
+
+    if (s.mode === 'daily') {
+      daily = { date: today(), won: false, tries: s.tries, secs: s.elapsed / 1000, streak: 0, lastWin: daily ? daily.lastWin || null : null };
+      write(DAILY_KEY, daily);
+      paint();
+      say('Out of luck. It was hiding right there. A new meadow arrives tomorrow.');
+      el.again.textContent = 'Play endless';
+      el.share.hidden = false;
+    } else {
+      const n = s.round - 1;
+      write(KEY, best);
+      s.cleared = n;
+      say(n ? `Out of luck. It was hiding right there. You cleared ${rounds(n)}.` : 'Out of luck. It was hiding right there.');
+      el.share.hidden = !n;
+    }
     el.again.focus({ preventScroll: true });
   }
 
@@ -219,14 +267,45 @@
       if (b === found) return;
       const p = pos(i);
       b.style.setProperty('--d', Math.round(Math.hypot(p.x - f.x, p.y - f.y) * 30) + 'ms');
-      b.style.setProperty('--gx', rand(70, 240).toFixed(0) + 'px');
-      b.style.setProperty('--gy', rand(-140, 70).toFixed(0) + 'px');
-      b.style.setProperty('--gr', rand(120, 440).toFixed(0) + 'deg');
+      b.style.setProperty('--gx', (70 + Math.random() * 170).toFixed(0) + 'px');
+      b.style.setProperty('--gy', (-140 + Math.random() * 210).toFixed(0) + 'px');
+      b.style.setProperty('--gr', (120 + Math.random() * 320).toFixed(0) + 'deg');
     });
     el.meadow.classList.add('cleared');
   }
 
-  /* ---- hint: say where to look, and ring the area ------------------------------ */
+  /* ---- today's meadow is already done: show the result instead ----------------------------- */
+  function showDailyDone() {
+    s = fresh('daily');
+    s.over = true;
+    s.running = false;
+    clearInterval(ticker);
+    el.meadow.hidden = true;
+    el.hint.hidden = el.next.hidden = true;
+    el.again.hidden = el.share.hidden = false;
+    el.again.textContent = 'Play endless';
+    el.time.textContent = daily.secs.toFixed(1);
+    paint();
+    say(daily.won
+      ? `You found today’s clover in ${triesOf(daily.tries)}, ${daily.secs.toFixed(1)}s. Streak: ${daysOf(daily.streak)}. A new meadow arrives tomorrow.`
+      : 'Today’s clover got away. A new meadow arrives tomorrow.');
+  }
+
+  /* ---- modes ------------------------------------------------------------------------------------- */
+  const focusMeadow = () => { const first = itemsOf()[0]; if (first && !el.meadow.hidden) first.focus({ preventScroll: true }); };
+  function setMode(mode) {
+    el.again.textContent = 'Play again';
+    if (mode === 'daily' && playedToday()) { showDailyDone(); return; }
+    s = fresh(mode);
+    newRound();
+  }
+  el.modes.forEach(b => b.addEventListener('click', () => {
+    if (b.dataset.mode === s.mode) return;
+    setMode(b.dataset.mode);
+    focusMeadow();
+  }));
+
+  /* ---- hint: say where to look, and ring the area ----------------------------------------------- */
   el.hint.addEventListener('click', () => {
     if (s.hinted || s.solved || s.over) return;
     s.hinted = true;
@@ -247,21 +326,27 @@
     const ring = document.createElement('i');
     ring.className = 'hint-ring';
     ring.setAttribute('aria-hidden', 'true');
-    ring.style.left = button.offsetLeft + cell / 2 + rand(-1.1, 1.1) * cell + 'px';
-    ring.style.top = button.offsetTop + cell / 2 + rand(-1.1, 1.1) * cell + 'px';
+    ring.style.left = button.offsetLeft + cell / 2 + (Math.random() * 2.2 - 1.1) * cell + 'px';
+    ring.style.top = button.offsetTop + cell / 2 + (Math.random() * 2.2 - 1.1) * cell + 'px';
     ring.style.setProperty('--d', cell * 5 + 'px');
     el.meadow.appendChild(ring);
     setTimeout(() => ring.remove(), 3200);
   });
 
-  /* ---- buttons ---------------------------------------------------------------------- */
-  const focusMeadow = () => { const first = itemsOf()[0]; if (first) first.focus({ preventScroll: true }); };
+  /* ---- buttons -------------------------------------------------------------------------------------- */
   el.next.addEventListener('click', () => { s.round++; newRound(); focusMeadow(); });
-  el.again.addEventListener('click', () => { s = fresh(); newRound(); focusMeadow(); });
+  el.again.addEventListener('click', () => { setMode('endless'); focusMeadow(); });
 
   el.share.addEventListener('click', async () => {
-    const n = s.cleared;
-    const text = n ? `I cleared ${rounds(n)} of the lucky meadow on Four Leaf. Can you beat it?` : 'I’m hunting for a four-leaf clover on Four Leaf. Can you find the lucky one?';
+    let text;
+    if (s.mode === 'daily' && daily) {
+      text = daily.won
+        ? `The lucky meadow, ${dateLabel()}: found the four-leaf clover in ${triesOf(daily.tries)} (${daily.secs.toFixed(1)}s). Streak: ${daysOf(daily.streak)}. Can you beat that?`
+        : `The lucky meadow, ${dateLabel()}: the four-leaf clover got away from me. Can you find it?`;
+    } else {
+      const n = s.cleared;
+      text = n ? `I cleared ${rounds(n)} of the lucky meadow on Four Leaf. Can you beat it?` : 'I’m hunting for a four-leaf clover on Four Leaf. Can you find the lucky one?';
+    }
     const url = 'https://tryfourleaf.com/lucky/';
     if (navigator.share) {
       try { await navigator.share({ title: 'The lucky meadow', text, url }); return; }
@@ -278,7 +363,7 @@
     setTimeout(() => { el.share.textContent = label; }, 2000);
   });
 
-  /* ---- keyboard: one tab stop, arrows move around the meadow --------------------------- */
+  /* ---- keyboard: one tab stop, arrows move around the meadow ------------------------------------------ */
   el.meadow.addEventListener('keydown', e => {
     const items = itemsOf();
     const i = items.indexOf(document.activeElement);
@@ -300,11 +385,11 @@
       clearTimeout(wait);
       wait = setTimeout(() => {
         const cols = columns();
-        if (s && cols !== s.cols) { s.cols = cols; el.meadow.style.setProperty('--cols', cols); }
+        if (s && !el.meadow.hidden && cols !== s.cols) { s.cols = cols; el.meadow.style.setProperty('--cols', cols); }
       }, 120);
     }).observe(el.meadow);
   }
 
-  s = fresh();
+  s = fresh('endless');
   newRound();
 })();

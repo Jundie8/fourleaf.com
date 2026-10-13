@@ -21,10 +21,10 @@
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="The lucky meadow: find the one clover with four leaves.">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="stylesheet" href="/style.css?v=c6c0c5f6">
+<link rel="stylesheet" href="/style.css?v=2604ecd3">
 <script>document.documentElement.classList.add('js');try{var t=localStorage.getItem('fl-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}</script>
-<script src="/site.js?v=75b79afb" defer></script>
-<script src="/lucky.js?v=ed7c09d8" defer></script>
+<script src="/site.js?v=822aa650" defer></script>
+<script src="/lucky.js?v=d8b7efac" defer></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -43,6 +43,11 @@
   <p class="nojs-only muted center-text">This little game needs JavaScript. The rest of the site doesn’t.</p>
 
   <section class="game" data-game aria-label="The lucky meadow">
+    <div class="modes" role="group" aria-label="Game mode">
+      <button type="button" class="mode" data-mode="endless" aria-pressed="true">Endless</button>
+      <button type="button" class="mode" data-mode="daily" aria-pressed="false">Daily</button>
+    </div>
+
     <div class="hud" role="group" aria-label="Game status">
       <div class="stat"><span class="k">Round</span><b class="v" data-round>1</b></div>
       <div class="stat"><span class="k">Luck</span><span class="luck" data-luck role="img" aria-label="Luck: 3 of 3"></span></div>
@@ -68,6 +73,7 @@
           <li>Each wrong pick wilts a leaf of luck. Out of luck, and the run ends.</li>
           <li>A clean find, with no misses, grows a leaf back.</li>
           <li>One hint per round. Each round the meadow gets fuller, and rarer decoys turn up.</li>
+          <li>Daily gives you one fresh meadow a day, and a streak for every day you find it.</li>
           <li>On a keyboard, the arrow keys move around the meadow and Enter picks.</li>
         </ul>
       </details>
@@ -77,6 +83,7 @@
 
 <footer class="site-footer"><div class="wrap">
   <nav aria-label="Footer"><a href="/greenlit/">Greenlit</a><a href="/greenlit/support/">Support</a><a href="/greenlit/privacy/">Privacy</a><a href="/greenlit/terms/">Terms</a><a href="/lucky/" aria-current="page">Play</a></nav>
+  <div class="theme" data-theme-slot></div>
   <p>© 2026 Four Leaf</p>
 </div></footer>
 </body>

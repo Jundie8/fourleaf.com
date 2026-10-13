@@ -147,6 +147,9 @@ img, svg { display: block; max-width: 100%; }
 
 /* the Auto / Light / Dark switch (site.js adds it to the footer) */
 .theme { display: inline-flex; gap: 2px; padding: 2px; border-radius: 999px; background: var(--surface); }
+.theme:empty { visibility: hidden; }
+.js .theme { min-width: 142px; min-height: 48px; }
+@media (max-width: 20rem) { .js .theme { min-width: 0; } }
 .theme button { display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 0; border-radius: 50%; background: none; color: var(--muted); cursor: pointer; transition: background-color .2s, color .2s, transform .3s var(--spring); }
 .theme button[aria-pressed="true"] { background: var(--raised); color: var(--green-deep); box-shadow: 0 1px 3px rgba(0, 0, 0, .18); }
 .theme svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
@@ -404,6 +407,9 @@ th { font-weight: 700; font-size: .82rem; letter-spacing: .06em; text-transform:
 .center-text { text-align: center; }
 .game { display: none; margin-top: clamp(1.5rem, 5vw, 2.5rem); }
 .js .game { display: block; }
+.modes { display: flex; gap: 2px; width: max-content; margin: 0 auto .9rem; padding: 2px; border-radius: 999px; background: var(--surface); }
+.mode { min-height: 44px; padding: 0 1.3rem; border: 0; border-radius: 999px; background: none; color: var(--muted); font: 700 .95rem var(--font); cursor: pointer; transition: background-color .2s, color .2s; }
+.mode[aria-pressed="true"] { background: var(--raised); color: var(--green-deep); box-shadow: 0 1px 3px rgba(0, 0, 0, .18); }
 .hud { display: grid; grid-template-columns: repeat(4, 1fr); gap: .5rem; margin-bottom: .75rem; }
 .stat { display: grid; align-content: space-between; gap: .15rem; padding: .55rem .75rem; border-radius: 14px; background: var(--surface); }
 .stat .k { font-size: .68rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
@@ -412,7 +418,7 @@ th { font-weight: 700; font-size: .82rem; letter-spacing: .06em; text-transform:
 .luck i { width: 1.2rem; height: 1.2rem; background: var(--green); -webkit-mask: var(--clover) center / contain no-repeat; mask: var(--clover) center / contain no-repeat; transition: transform .45s var(--spring), background-color .3s, opacity .3s; }
 .luck i.lost { background: var(--edge); opacity: .5; transform: scale(.7) rotate(25deg); }
 
-.meadow { position: relative; display: flex; flex-wrap: wrap; justify-content: center; padding: .5rem; border-radius: 24px; background: var(--surface); overflow: hidden; touch-action: manipulation; }
+.meadow { position: relative; min-height: 10.5rem; display: flex; flex-wrap: wrap; justify-content: center; padding: .5rem; border-radius: 24px; background: var(--surface); overflow: hidden; touch-action: manipulation; }
 .meadow button { position: relative; flex: 0 0 calc(100% / var(--cols, 6)); aspect-ratio: 1; min-height: 44px; padding: 0; border: 0; border-radius: 14px; background: none; color: var(--green); color: color-mix(in srgb, var(--green-deep) var(--mix, 82%), var(--surface)); cursor: pointer; animation: pop .45s var(--spring) calc(var(--i, 0) * 4ms) backwards; }
 .meadow svg { width: 100%; height: 100%; fill: currentColor; overflow: visible; transform: translate(var(--x, 0), var(--y, 0)) rotate(var(--r, 0deg)) scale(calc(var(--s, .85) * var(--hv, 1))); transition: transform .35s var(--spring), filter .3s; }
 .meadow button.miss { pointer-events: none; color: var(--edge); opacity: .45; animation: wiggle .4s; }
@@ -427,6 +433,8 @@ th { font-weight: 700; font-size: .82rem; letter-spacing: .06em; text-transform:
 .hint-ring { position: absolute; z-index: 1; width: var(--d); height: var(--d); margin: calc(var(--d) / -2) 0 0 calc(var(--d) / -2); border: 2px dashed var(--green); border-radius: 50%; background: radial-gradient(closest-side, var(--glow), transparent); pointer-events: none; animation: ring 3.2s ease-out forwards; }
 .game-msg { min-height: 3.2rem; margin: .9rem 0 0; text-align: center; color: var(--muted); text-wrap: balance; }
 .game-actions { justify-content: center; margin-top: .5rem; }
+/* press feedback */
+.meadow button:not(.miss):not(.found):not(.reveal):active svg { --hv: .85; }
 @keyframes pop { from { opacity: 0; transform: scale(.2); } }
 @keyframes throb { 50% { transform: scale(1.12); } }
 @keyframes ring { 0% { opacity: 0; transform: scale(.6); } 15% { opacity: 1; transform: scale(1); } 80% { opacity: 1; } 100% { opacity: 0; transform: scale(1.1); } }
@@ -445,6 +453,7 @@ th { font-weight: 700; font-size: .82rem; letter-spacing: .06em; text-transform:
 
 /* hover effects only where a pointer can really hover (no sticky hover after a tap) */
 @media (hover: hover) {
+  .mode[aria-pressed="false"]:hover { color: var(--text); }
   .anchor { opacity: 0; }
   .prose h2:hover .anchor { opacity: 1; }
   .toc-side a:hover { color: var(--text); }

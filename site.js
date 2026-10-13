@@ -233,7 +233,7 @@
     // which dishes does a word flag? (used for the little note under the field)
     const flaggedBy = word => rows.filter(li => $$('.ings span', li).some(i => matches(word, i))).map(li => $('b', li).textContent);
     const niceList = a => (a.length < 3 ? a.join(' and ') : a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1]);
-    const tell = text => { note.textContent = text; note.hidden = !text; };
+    const tell = text => { note.textContent = text; note.hidden = !text; if (text) status.textContent = text; };
 
     chipBox.addEventListener('click', e => {
       const x = e.target.closest('.chip-x');
@@ -483,8 +483,8 @@
     const LABELS = { auto: 'Match my device', light: 'Light', dark: 'Dark' };
     const read = () => { try { const v = localStorage.getItem(KEY); return v === 'light' || v === 'dark' ? v : 'auto'; } catch (e) { return 'auto'; } };
 
-    const box = document.createElement('div');
-    box.className = 'theme';
+    const box = $('[data-theme-slot]', footer);
+    if (!box) return;
     box.setAttribute('role', 'group');
     box.setAttribute('aria-label', 'Colour theme');
     const buttons = Object.keys(ICONS).map(mode => {
@@ -510,7 +510,6 @@
       apply(b.dataset.mode);
     });
     addEventListener('storage', e => { if (e.key === KEY) apply(read()); }); // another tab changed it
-    footer.insertBefore(box, footer.querySelector('p'));
     apply(read());
   }
 
@@ -565,6 +564,34 @@
     spy();
   }
 
+  /* ---- type "luck" anywhere and it rains leaves --------------------------------- */
+  function rain() {
+    if (calm()) return;
+    const colours = ['var(--green)', 'var(--green-deep)', 'var(--ask)'];
+    for (let i = 0; i < 44; i++) {
+      const el = document.createElement('i');
+      el.className = 'spark';
+      const size = 14 + Math.random() * 14;
+      el.style.cssText = `left:${Math.random() * 100}vw;top:-30px;width:${size}px;height:${size * 1.06}px;background:${colours[i % 3]}`;
+      document.body.appendChild(el);
+      el.animate(
+        [
+          { transform: 'translate(0, 0) rotate(0)', opacity: 1 },
+          { transform: `translate(${Math.random() * 160 - 80}px, ${innerHeight + 60}px) rotate(${180 + Math.random() * 540}deg)`, opacity: 0.9 },
+        ],
+        { duration: 2600 + Math.random() * 2600, delay: Math.random() * 1500, easing: 'cubic-bezier(.3,.1,.6,1)', fill: 'backwards' }
+      ).onfinish = () => el.remove();
+    }
+  }
+  let typed = '';
+  addEventListener('keydown', e => {
+    if (e.metaKey || e.ctrlKey || e.altKey || e.key.length !== 1) return;
+    const t = document.activeElement;
+    if (t && (/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName) || t.isContentEditable)) return;
+    typed = (typed + e.key.toLowerCase()).slice(-4);
+    if (typed === 'luck') { typed = ''; rain(); }
+  });
+
   /* ---- small touches ----------------------------------------------------- */
   // A link to #some-question opens that FAQ item.
   function openFromHash() {
@@ -591,5 +618,5 @@
   // lucky.js (the game page) borrows these
   window.fourleaf = { NS, LEAF, calm, burst };
 
-  console.log('%c Four Leaf %c small apps, made with care. Found a bug? support@tryfourleaf.com', 'background:#047857;color:#fff;border-radius:6px;padding:2px 6px;font-weight:700', '');
+  console.log('%c Four Leaf %c small apps, made with care. Found a bug? support@tryfourleaf.com. (Try typing “luck” on the page.)', 'background:#047857;color:#fff;border-radius:6px;padding:2px 6px;font-weight:700', '');
 })();
