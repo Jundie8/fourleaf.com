@@ -242,6 +242,21 @@ code { font-size: .9em; background: var(--surface); padding: .1em .35em; border-
 .js-only { display: none; }
 .js .js-only { display: inline; }
 .js .nojs-only { display: none; }
+.own { display: none; margin: .75rem 0 .25rem; }
+.js .own { display: block; }
+.own label { display: block; margin: 0 0 .35rem; color: var(--muted); font-size: .86rem; font-weight: 600; }
+.own-row { display: flex; gap: .5rem; }
+.own input { flex: 1; min-width: 0; min-height: 44px; padding: 0 1rem; border: 1.5px solid var(--edge); border-radius: 999px; background: var(--bg); color: var(--text); font: inherit; font-size: 1rem; }
+.own input::placeholder { color: var(--muted); opacity: .8; }
+.own input:focus-visible { outline-offset: 2px; border-color: var(--green); }
+.chip.add { justify-content: center; padding: 0 1.1rem; background: var(--green-deep); border-color: var(--green-deep); color: var(--on-green); font-weight: 700; }
+.chip.add::before, .chip.add::after { display: none; }
+.own-note { margin: .5rem 0 0; color: var(--muted); font-size: .88rem; text-wrap: balance; }
+.chip-own { display: inline-flex; align-items: center; }
+.chip-own .chip { border-top-right-radius: 0; border-bottom-right-radius: 0; border-right-width: 0; }
+.chip-x { display: grid; place-items: center; width: 44px; min-height: 44px; padding: 0; border: 1.5px solid var(--green); border-left-width: 0; border-radius: 0 999px 999px 0; background: var(--tint); color: var(--muted); cursor: pointer; }
+.chip-x svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
+.chip-own .chip[aria-pressed="false"] + .chip-x { background: var(--bg); border-color: var(--rule); }
 .chips { display: none; flex-wrap: wrap; gap: .45rem; margin: 0 0 .4rem; }
 .js .chips { display: flex; }
 .chip { position: relative; display: inline-flex; align-items: center; gap: .5rem; min-height: 44px; padding: 0 .85rem 0 .7rem; border: 1.5px solid var(--rule); border-radius: 999px; background: var(--bg); color: var(--text); font: 600 .95rem/1 var(--font); cursor: pointer; transition: background-color .2s, border-color .2s, transform .3s var(--spring); }
@@ -402,6 +417,7 @@ th { font-weight: 700; font-size: .82rem; letter-spacing: .06em; text-transform:
 
 /* hover effects only where a pointer can really hover (no sticky hover after a tap) */
 @media (hover: hover) {
+  .chip-x:hover { color: var(--stop-ink); }
   .meadow button:not(.miss):not(.found):not(.reveal):hover { color: var(--green); }
   .meadow button:not(.miss):not(.found):not(.reveal):hover svg { --hv: 1.2; }
   .theme button:not([aria-pressed="true"]):hover { color: var(--text); transform: scale(1.08); }

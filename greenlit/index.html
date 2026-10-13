@@ -21,9 +21,9 @@
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Greenlit, a dietary menu scanner. Photograph a menu, see what to order, ask about or skip.">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="stylesheet" href="/style.css?v=57b64670">
+<link rel="stylesheet" href="/style.css?v=4e313d3e">
 <script>document.documentElement.classList.add('js');try{var t=localStorage.getItem('fl-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}</script>
-<script src="/site.js?v=591e172b" defer></script>
+<script src="/site.js?v=09af2a84" defer></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -49,35 +49,43 @@
       <button type="button" class="chip" data-diet="nuts" aria-pressed="true">Nut allergy</button>
       <button type="button" class="chip" data-diet="mush" aria-pressed="false">No mushrooms</button>
     </div>
+    <form class="own" novalidate>
+      <label for="own-input">Avoid something else?</label>
+      <div class="own-row">
+        <input id="own-input" type="text" maxlength="24" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="done" placeholder="e.g. egg, cilantro, tofu">
+        <button type="submit" class="chip add">Add</button>
+      </div>
+      <p class="own-note" hidden></p>
+    </form>
     <ul class="dishes">
       <li data-i="2" data-state="go">
         <span class="lf" aria-hidden="true"></span>
-        <div><b>Mushroom risotto</b><span class="ings">arborio rice, <span data-t="mushroom">mushrooms</span>, <span data-t="dairy" data-hold>parmesan</span>, <span class="inf" data-t="dairy" data-hold>butter</span></span></div>
+        <div><b>Mushroom risotto</b><span class="ings"><span data-t="">arborio rice</span>, <span data-t="mushroom">mushrooms</span>, <span data-t="dairy" data-hold>parmesan</span>, <span class="inf" data-t="dairy" data-hold>butter</span></span></div>
         <span class="tag">Greenlit</span>
       </li>
       <li data-i="5" data-state="go">
         <span class="lf" aria-hidden="true"></span>
-        <div><b>Mango sorbet</b><span class="ings">mango, lime, sugar</span></div>
+        <div><b>Mango sorbet</b><span class="ings"><span data-t="">mango</span>, <span data-t="" data-hold>lime</span>, <span data-t="">sugar</span></span></div>
         <span class="tag">Greenlit</span>
       </li>
       <li data-i="0" data-state="ask">
         <span class="lf" aria-hidden="true"></span>
-        <div><b>Caesar salad</b><span class="ings">romaine, <span class="hit" data-t="gluten" data-hold>croutons</span>, <span data-t="dairy" data-hold>parmesan</span>, <span class="inf" data-t="fish" data-hold>anchovy</span></span></div>
+        <div><b>Caesar salad</b><span class="ings"><span data-t="">romaine</span>, <span class="hit" data-t="gluten" data-hold>croutons</span>, <span data-t="dairy" data-hold>parmesan</span>, <span class="inf" data-t="fish" data-hold>anchovy</span></span></div>
         <span class="tag">Ask first</span>
       </li>
       <li data-i="1" data-state="ask">
         <span class="lf" aria-hidden="true"></span>
-        <div><b>Pad thai</b><span class="ings">rice noodles, tofu, <span class="hit" data-t="nuts" data-hold>peanuts</span>, <span data-t="egg" data-hold>egg</span>, <span class="inf" data-t="fish" data-hold>fish sauce</span></span></div>
+        <div><b>Pad thai</b><span class="ings"><span data-t="">rice noodles</span>, <span data-t="">tofu</span>, <span class="hit" data-t="nuts" data-hold>peanuts</span>, <span data-t="egg" data-hold>egg</span>, <span class="inf" data-t="fish" data-hold>fish sauce</span></span></div>
         <span class="tag">Ask first</span>
       </li>
       <li data-i="3" data-state="stop">
         <span class="lf" aria-hidden="true"></span>
-        <div><b>Margherita pizza</b><span class="ings"><span class="hit" data-t="gluten">dough</span>, <span data-t="dairy">mozzarella</span>, tomato, basil</span></div>
+        <div><b>Margherita pizza</b><span class="ings"><span class="hit" data-t="gluten">dough</span>, <span data-t="dairy">mozzarella</span>, <span data-t="">tomato</span>, <span data-t="" data-hold>basil</span></span></div>
         <span class="tag">Skip</span>
       </li>
       <li data-i="4" data-state="stop">
         <span class="lf" aria-hidden="true"></span>
-        <div><b>Chicken satay</b><span class="ings"><span data-t="meat">chicken</span>, <span class="hit" data-t="nuts">peanut sauce</span>, cucumber</span></div>
+        <div><b>Chicken satay</b><span class="ings"><span data-t="meat">chicken</span>, <span class="hit" data-t="nuts">peanut sauce</span>, <span data-t="" data-hold>cucumber</span></span></div>
         <span class="tag">Skip</span>
       </li>
     </ul>

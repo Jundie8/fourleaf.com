@@ -157,19 +157,35 @@
     // The same three outcomes the app uses. An ingredient the kitchen can leave
     // out (data-hold) makes a dish "ask first"; one the dish is built on makes it "skip".
     const FORBID = { vegan: ['meat', 'fish', 'dairy', 'egg'], gf: ['gluten'], nuts: ['nuts'], mush: ['mushroom'] };
+    // a few everyday words people type, mapped to the tags the menu uses
+    const SYNONYMS = { milk: 'dairy', cheese: 'dairy', cream: 'dairy', lactose: 'dairy', wheat: 'gluten', flour: 'gluten', bread: 'gluten', pasta: 'gluten', peanut: 'nuts', almond: 'nuts', cashew: 'nuts', seafood: 'fish', pork: 'meat', beef: 'meat' };
     const LABEL = { go: 'Greenlit', ask: 'Ask first', stop: 'Skip' };
     const RANK = { go: 0, ask: 1, stop: 2 };
-    const chips = $$('[data-diet]', root);
+    const chipBox = $('.chips', root);
     const list = $('.dishes', root);
     const rows = $$('li', list); // data-i is each dish's place on the menu; it breaks ties within a group
     const status = $('.demo-status', root);
+    const form = $('.own', root);
+    const input = $('input', form);
+    const note = $('.own-note', form);
+    const pressed = c => c.getAttribute('aria-pressed') === 'true';
+    const words = () => $$('[data-custom]', root).filter(pressed).map(c => c.dataset.custom);
+
+    // "eggs" should find "egg", "tomatoes" should find "tomato"
+    const forms = w => [...new Set([w, w.replace(/ies$/, 'y'), w.replace(/es$/, ''), w.replace(/s$/, '')])].filter(x => x.length >= 3);
+    function matches(word, ing) {
+      const text = ing.textContent.toLowerCase();
+      const tags = ing.dataset.t.split(' ').filter(Boolean);
+      return forms(word).some(f => text.includes(f) || tags.some(t => t.includes(f)) || (SYNONYMS[f] && tags.includes(SYNONYMS[f])));
+    }
 
     function sort(animate) {
-      const forbid = new Set(chips.filter(c => c.getAttribute('aria-pressed') === 'true').flatMap(c => FORBID[c.dataset.diet]));
+      const forbid = new Set($$('[data-diet]', root).filter(pressed).flatMap(c => FORBID[c.dataset.diet]));
+      const custom = words();
       const count = { go: 0, ask: 0, stop: 0 };
       rows.forEach(li => {
-        const ings = $$('[data-t]', li);
-        const hits = ings.filter(i => i.dataset.t.split(' ').some(t => forbid.has(t)));
+        const ings = $$('.ings span', li);
+        const hits = ings.filter(i => i.dataset.t.split(' ').some(t => forbid.has(t)) || custom.some(w => matches(w, i)));
         ings.forEach(i => i.classList.toggle('hit', hits.includes(i)));
         const state = !hits.length ? 'go' : hits.every(i => i.hasAttribute('data-hold')) ? 'ask' : 'stop';
         li.dataset.state = state;
@@ -187,7 +203,7 @@
           if (dy) li.animate([{ transform: `translateY(${dy}px)` }, { transform: 'none' }], { duration: 400, easing: 'cubic-bezier(.34,1.3,.64,1)' });
         });
       }
-      status.textContent = `${count.go} greenlit, ${count.ask} ask first, ${count.stop} skip.`;
+      status.textContent = `${count.go} greenlit, ${count.ask} ask first, ${count.stop} skip.` + (note.hidden ? '' : ' ' + note.textContent);
     }
 
     // When the demo first scrolls into view, a scan line sweeps down the list and each
@@ -214,11 +230,50 @@
       }, { threshold: 0.4 }).observe(list);
     }
 
-    chips.forEach(c => c.addEventListener('click', () => {
+    // which dishes does a word flag? (used for the little note under the field)
+    const flaggedBy = word => rows.filter(li => $$('.ings span', li).some(i => matches(word, i))).map(li => $('b', li).textContent);
+    const niceList = a => (a.length < 3 ? a.join(' and ') : a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1]);
+    const tell = text => { note.textContent = text; note.hidden = !text; };
+
+    chipBox.addEventListener('click', e => {
+      const x = e.target.closest('.chip-x');
+      const chip = e.target.closest('[data-diet], [data-custom]');
+      if (!x && !chip) return;
       settle(); // a tap during the sweep finishes it straight away
-      c.setAttribute('aria-pressed', c.getAttribute('aria-pressed') === 'true' ? 'false' : 'true');
+      if (x) {
+        const own = x.closest('.chip-own');
+        tell('');
+        own.remove();
+        input.focus();
+      } else {
+        chip.setAttribute('aria-pressed', pressed(chip) ? 'false' : 'true');
+        tell('');
+      }
       sort(true);
-    }));
+    });
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const word = input.value.trim().toLowerCase().replace(/\s+/g, ' ');
+      if (!word) return;
+      if (word.length < 3) return tell('Try a word with at least three letters.');
+      if ($$('[data-custom]', root).some(c => c.dataset.custom === word)) return tell(`“${word}” is already on your list.`);
+      if ($$('[data-custom]', root).length >= 4) return tell('That’s plenty for a demo. Remove one to add another.');
+      settle();
+      const own = document.createElement('span');
+      own.className = 'chip-own';
+      own.innerHTML = '<button type="button" class="chip" aria-pressed="true"></button><button type="button" class="chip-x"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 4.5l7 7M11.5 4.5l-7 7"/></svg></button>';
+      const chip = $('.chip', own);
+      chip.dataset.custom = word;
+      chip.textContent = `No ${word}`;
+      const x = $('.chip-x', own);
+      x.setAttribute('aria-label', `Remove ${word}`);
+      chipBox.appendChild(own);
+      input.value = '';
+      const found = flaggedBy(word);
+      tell(found.length ? `“${word}” shows up in ${niceList(found)}.` : `Nothing on this menu has “${word}”. Good news.`);
+      sort(true);
+    });
     sort(false);
   }
 
