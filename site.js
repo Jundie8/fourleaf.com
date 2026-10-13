@@ -592,6 +592,24 @@
     if (typed === 'luck') { typed = ''; rain(); }
   });
 
+  /* ---- the FAQ: open or close every answer at once --------------------------------- */
+  function faqTools() {
+    const faq = $('.faq');
+    const items = faq ? $$('details', faq) : [];
+    if (items.length < 3) return;
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'linklike faq-all';
+    const wrap = document.createElement('div');
+    wrap.className = 'faq-tools';
+    wrap.appendChild(btn);
+    faq.before(wrap);
+    const sync = () => { const all = items.every(d => d.open); btn.textContent = all ? 'Collapse all' : 'Expand all'; btn.setAttribute('aria-expanded', String(all)); };
+    btn.addEventListener('click', () => { const open = !items.every(d => d.open); items.forEach(d => { d.open = open; }); sync(); });
+    items.forEach(d => d.addEventListener('toggle', sync));
+    sync();
+  }
+
   /* ---- small touches ----------------------------------------------------- */
   // A link to #some-question opens that FAQ item.
   function openFromHash() {
@@ -612,6 +630,7 @@
   $$('[data-copy]').forEach(copyButton);
   theme();
   legal();
+  faqTools();
   toTop();
   openFromHash();
 

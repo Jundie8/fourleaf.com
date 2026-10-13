@@ -16,6 +16,7 @@
     meadow: $('[data-meadow]'), msg: $('.game-msg'), round: $('[data-round]'), time: $('[data-time]'),
     best: $('[data-best]'), luck: $('[data-luck]'), hint: $('[data-hint]'), next: $('[data-next]'),
     again: $('[data-again]'), share: $('[data-share]'), modes: [...root.querySelectorAll('[data-mode]')],
+    announce: $('[data-announce]'),
   };
   const kRound = el.round.previousElementSibling;
   const kBest = el.best.previousElementSibling;
@@ -24,6 +25,7 @@
   const DAILY_ROUND = 4; // the daily meadow is always round-four dense
   const KEY = 'fl-lucky';
   const DAILY_KEY = 'fl-daily';
+  const SR_KEY = 'fl-lucky-sr';
   const LEAVES = { two: 2, three: 3, four: 4, five: 5 };
 
   /* ---- randomness: the daily meadow is seeded by the date, endless is not ---------- */
@@ -56,6 +58,11 @@
   let daily = read(DAILY_KEY, null);
   const streakNow = () => (daily && (daily.lastWin === today() || daily.lastWin === yesterday()) ? daily.streak || 0 : 0);
   const playedToday = () => !!daily && daily.date === today();
+
+  /* ---- screen reader mode: clovers say how many leaves they have ------------------------------ */
+  let announce = !!read(SR_KEY, {}).on;
+  el.announce.checked = announce;
+  const nameOf = (i, n, kind) => `Clover ${i + 1} of ${n}${announce ? `, ${leaves(LEAVES[kind])}` : ''}`;
 
   /* ---- state ---------------------------------------------------------------------------- */
   let s = null;
@@ -113,7 +120,7 @@
       b.type = 'button';
       b.dataset.kind = kind;
       b.tabIndex = i ? -1 : 0; // one tab stop; arrow keys move around the meadow
-      b.setAttribute('aria-label', `Clover ${i + 1} of ${n}`);
+      b.setAttribute('aria-label', nameOf(i, n, kind));
       b.appendChild(cloverSvg(kind));
       b.style.setProperty('--i', Math.min(i, 120));
       b.style.setProperty('--r', rand(0, 360).toFixed(0) + 'deg');
@@ -304,6 +311,13 @@
     setMode(b.dataset.mode);
     focusMeadow();
   }));
+
+  el.announce.addEventListener('change', () => {
+    announce = el.announce.checked;
+    write(SR_KEY, { on: announce });
+    itemsOf().forEach((b, i) => { if (!b.classList.contains('miss') && !b.classList.contains('found')) b.setAttribute('aria-label', nameOf(i, s.n, b.dataset.kind)); });
+    say(announce ? 'Screen reader mode on. Each clover now announces its leaf count.' : 'Screen reader mode off.');
+  });
 
   /* ---- hint: say where to look, and ring the area ----------------------------------------------- */
   el.hint.addEventListener('click', () => {

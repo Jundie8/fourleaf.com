@@ -102,6 +102,11 @@
   --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 16px 36px -20px rgba(0, 0, 0, .7);
 }
 
+/* People who ask their device for more contrast get stronger lines and body-coloured secondary text. */
+@media (prefers-contrast: more) {
+  :root:root { --rule: var(--edge); --ghost: var(--edge); --muted: var(--text); }
+}
+
 /* ---- base ------------------------------------------------------------ */
 * { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; scroll-padding-top: 1.5rem; }
@@ -339,6 +344,9 @@ code { font-size: .9em; background: var(--surface); padding: .1em .35em; border-
 
 /* ---- support: the FAQ ------------------------------------------------ */
 .faq { margin-top: 2.5rem; border-top: 1px solid var(--rule); }
+.faq-tools { display: flex; justify-content: flex-end; margin-top: 2rem; margin-bottom: -2.25rem; }
+.faq-tools + .faq { margin-top: 2.5rem; }
+.faq-all { color: var(--muted); font-size: .9rem; }
 .faq details { border-bottom: 1px solid var(--rule); }
 .faq summary { display: flex; align-items: center; gap: .85rem; min-height: 56px; padding: .6rem 0; cursor: pointer; font-weight: 650; list-style: none; }
 .faq summary::-webkit-details-marker { display: none; }
@@ -442,6 +450,8 @@ th { font-weight: 700; font-size: .82rem; letter-spacing: .06em; text-transform:
 /* the wind takes everything that wasn't lucky, nearest first */
 .meadow.cleared button:not(.found) { pointer-events: none; opacity: 0; transform: translate(var(--gx, 120px), var(--gy, -40px)) rotate(var(--gr, 240deg)); transition: transform .9s cubic-bezier(.5, 0, .9, .5) var(--d, 0ms), opacity .7s ease-in var(--d, 0ms); }
 .hint-ring { position: absolute; z-index: 1; width: var(--d); height: var(--d); margin: calc(var(--d) / -2) 0 0 calc(var(--d) / -2); border: 2px dashed var(--green); border-radius: 50%; background: radial-gradient(closest-side, var(--glow), transparent); pointer-events: none; animation: ring 3.2s ease-out forwards; }
+.check { display: flex; align-items: flex-start; gap: .65rem; min-height: 44px; padding: .5rem 0; cursor: pointer; }
+.check input { flex: none; width: 1.25rem; height: 1.25rem; margin: .15rem 0 0; accent-color: var(--green); }
 .game-msg { min-height: 3.2rem; margin: .9rem 0 0; text-align: center; color: var(--muted); text-wrap: balance; }
 .game-actions { justify-content: center; margin-top: .5rem; }
 /* press feedback */
