@@ -103,6 +103,7 @@
         const r = b.getBoundingClientRect();
         burst(r.left + r.width / 2, r.top + r.height / 2);
         lucky(true);
+        if (!calm() && navigator.vibrate) navigator.vibrate([12, 50, 12]);
         msg.textContent = tries === 1 ? 'First try. Absurdly lucky.' : `Found it in ${tries} tries. Lucky you.`;
         again.hidden = false;
         if (home) home.hidden = false;
