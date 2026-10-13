@@ -62,8 +62,8 @@
   }
 
   function patch(root) {
-    const N = 21;
-    const COLS = 7;
+    const N = 18;
+    const COLS = 6;
     const grid = $('.patch-grid', root);
     const msg = $('.patch-msg', root);
     const again = $('.patch-again', root);
