@@ -2,25 +2,46 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-ScJ475b7nRqsaSrlvFCMs+FEwNyDBvjljBXLCiuwjsU='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; font-src 'none'; media-src 'none'; object-src 'none'; frame-src 'none'; form-action 'none'; base-uri 'none'; manifest-src 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
 <title>Page not found — Four Leaf</title>
 <meta name="robots" content="noindex">
+<meta name="theme-color" content="#fff8ec" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1a1814" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="/style.css">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/style.css?v=10136394">
+<script>document.documentElement.classList.add('js');try{var t=localStorage.getItem('fl-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}</script>
+<script src="/site.js?v=c88e618b" defer></script>
 </head>
 <body>
+<a class="skip" href="#main">Skip to content</a>
 <header class="site-header"><div class="wrap">
-  <a class="brand" href="/"><img src="/favicon.svg" width="28" height="28" alt="">Four Leaf</a>
+  <a class="brand" href="/"><img src="/favicon.svg" width="30" height="30" alt="">Four Leaf</a>
   <nav aria-label="Main"><a href="/greenlit/">Greenlit</a><a href="/greenlit/support/">Support</a></nav>
 </div></header>
 
-<main class="wrap">
+<main id="main" tabindex="-1" class="wrap lost">
   <h1>That page isn’t here.</h1>
   <p class="lede">The link may be old, or mistyped. Try the <a href="/">home page</a> or <a href="/greenlit/">Greenlit</a>.</p>
+  <p class="muted lost-path" hidden>Nothing lives at <code data-path></code>.</p>
+
+  <section class="patch" data-patch aria-labelledby="patch-h">
+    <p id="patch-h" class="muted">Or try your luck: find the four-leaf one and we’ll take you home.</p>
+    <div class="patch-grid" role="group" aria-label="Find the four-leaf clover"></div>
+    <p class="patch-msg" aria-live="polite"></p>
+    <div class="patch-actions">
+      <a class="button patch-home" href="/" hidden>Take me home <span class="arrow" aria-hidden="true">→</span></a>
+      <button type="button" class="linklike patch-again" hidden>Play again</button>
+    </div>
+    <p class="patch-more"><a href="/lucky/">Want a bigger meadow? Play the lucky meadow <span class="arrow" aria-hidden="true">→</span></a></p>
+  </section>
 </main>
 
 <footer class="site-footer"><div class="wrap">
-  <p><a href="/greenlit/">Greenlit</a><a href="/greenlit/support/">Support</a><a href="/greenlit/privacy/">Privacy</a><a href="/greenlit/terms/">Terms</a></p>
+  <nav aria-label="Footer"><a href="/greenlit/">Greenlit</a><a href="/greenlit/support/">Support</a><a href="/greenlit/privacy/">Privacy</a><a href="/greenlit/terms/">Terms</a><a href="/lucky/">Play</a></nav>
+  <div class="theme" data-theme-slot></div>
   <p>© 2026 Four Leaf</p>
 </div></footer>
 </body>

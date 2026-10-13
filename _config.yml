@@ -1,0 +1,4 @@
+# GitHub Pages builds this folder with Jekyll by default. Keep the repo's own tooling out of the published site.
+exclude:
+  - README.md
+  - scripts

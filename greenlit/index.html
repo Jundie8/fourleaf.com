@@ -2,53 +2,149 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-ScJ475b7nRqsaSrlvFCMs+FEwNyDBvjljBXLCiuwjsU='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; font-src 'none'; media-src 'none'; object-src 'none'; frame-src 'none'; form-action 'none'; base-uri 'none'; manifest-src 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
 <title>Greenlit — Dietary Menu Scanner</title>
 <meta name="description" content="Photograph a restaurant menu and Greenlit sorts every dish against your diets, allergies and dislikes. Your diet profile never leaves your phone.">
-<meta name="theme-color" content="#047857">
+<meta name="theme-color" content="#fff8ec" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1a1814" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="/style.css">
+<link rel="canonical" href="https://tryfourleaf.com/greenlit/">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Four Leaf">
+<meta property="og:title" content="Greenlit — Dietary Menu Scanner">
+<meta property="og:description" content="Photograph a restaurant menu and Greenlit sorts every dish against your diets, allergies and dislikes. Your diet profile never leaves your phone.">
+<meta property="og:url" content="https://tryfourleaf.com/greenlit/">
+<meta property="og:image" content="https://tryfourleaf.com/og-greenlit.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Greenlit, a dietary menu scanner. Photograph a menu, see what to order, ask about or skip.">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="stylesheet" href="/style.css?v=10136394">
+<script>document.documentElement.classList.add('js');try{var t=localStorage.getItem('fl-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}</script>
+<script src="/site.js?v=c88e618b" defer></script>
 </head>
 <body>
+<a class="skip" href="#main">Skip to content</a>
 <header class="site-header"><div class="wrap">
-  <a class="brand" href="/"><img src="/favicon.svg" width="28" height="28" alt="">Four Leaf</a>
+  <a class="brand" href="/"><img src="/favicon.svg" width="30" height="30" alt="">Four Leaf</a>
   <nav aria-label="Main"><a href="/greenlit/" aria-current="page">Greenlit</a><a href="/greenlit/support/">Support</a></nav>
 </div></header>
 
-<main class="wrap">
-  <p class="eyebrow">Dietary menu scanner</p>
-  <h1>Greenlit</h1>
-  <p class="lede">Photograph a restaurant menu. Greenlit reads it and sorts every dish against your diets, allergies and dislikes, so you can see what to order, what to ask about, and what to skip.</p>
-  <p><span class="pill">Coming soon to the App Store</span></p>
+<main id="main" tabindex="-1" class="wrap">
+  <div class="hero">
+    <img class="app-icon" src="/greenlit/icon.png" width="96" height="96" alt="">
+    <p class="eyebrow">Dietary menu scanner</p>
+    <h1>Greenlit</h1>
+    <p class="lede">Photograph a menu. See what to order, what to ask about, and what to skip.</p>
+    <p><span class="pill">Coming soon to the App Store</span></p>
+  </div>
 
-  <h2>Three kinds of dish</h2>
-  <ul class="states">
-    <li><span class="dot go" aria-hidden="true"></span><div><strong>Greenlit</strong><span class="d">Nothing in it conflicts with your profile, as far as the menu says. These sit at the top.</span></div></li>
-    <li><span class="dot ask" aria-hidden="true"></span><div><strong>Ask first</strong><span class="d">Fine if the kitchen leaves one thing out. Greenlit flags it and shows you what to ask them to hold.</span></div></li>
-    <li><span class="dot stop" aria-hidden="true"></span><div><strong>Skip</strong><span class="d">Built around something you avoid. Dimmed at the bottom, so it stays out of the way.</span></div></li>
-  </ul>
+  <section class="card demo" data-demo aria-labelledby="demo-h">
+    <p class="demo-label" id="demo-h"><span class="js-only">Try it: pick your diets</span><span class="nojs-only">Example: gluten-free and a nut allergy</span></p>
+    <div class="chips" role="group" aria-label="Your diets, allergies and dislikes">
+      <button type="button" class="chip" data-diet="vegan" aria-pressed="false">Vegan</button>
+      <button type="button" class="chip" data-diet="gf" aria-pressed="true">Gluten-free</button>
+      <button type="button" class="chip" data-diet="nuts" aria-pressed="true">Nut allergy</button>
+      <button type="button" class="chip" data-diet="mush" aria-pressed="false">No mushrooms</button>
+    </div>
+    <form class="own" novalidate>
+      <label for="own-input">Avoid something else?</label>
+      <div class="own-row">
+        <input id="own-input" type="text" maxlength="24" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="done" placeholder="e.g. egg, cilantro, tofu">
+        <button type="submit" class="chip add">Add</button>
+      </div>
+      <p class="own-note" hidden></p>
+    </form>
+    <ul class="dishes">
+      <li data-i="2" data-state="go">
+        <span class="lf" aria-hidden="true"></span>
+        <div><b>Mushroom risotto</b><span class="ings"><span data-t="">arborio rice</span>, <span data-t="mushroom">mushrooms</span>, <span data-t="dairy" data-hold>parmesan</span>, <span class="inf" data-t="dairy" data-hold>butter</span></span></div>
+        <span class="tag">Greenlit</span>
+      </li>
+      <li data-i="5" data-state="go">
+        <span class="lf" aria-hidden="true"></span>
+        <div><b>Mango sorbet</b><span class="ings"><span data-t="">mango</span>, <span data-t="" data-hold>lime</span>, <span data-t="">sugar</span></span></div>
+        <span class="tag">Greenlit</span>
+      </li>
+      <li data-i="0" data-state="ask">
+        <span class="lf" aria-hidden="true"></span>
+        <div><b>Caesar salad</b><span class="ings"><span data-t="">romaine</span>, <span class="hit" data-t="gluten" data-hold>croutons</span>, <span data-t="dairy" data-hold>parmesan</span>, <span class="inf" data-t="fish" data-hold>anchovy</span></span></div>
+        <span class="tag">Ask first</span>
+      </li>
+      <li data-i="1" data-state="ask">
+        <span class="lf" aria-hidden="true"></span>
+        <div><b>Pad thai</b><span class="ings"><span data-t="">rice noodles</span>, <span data-t="">tofu</span>, <span class="hit" data-t="nuts" data-hold>peanuts</span>, <span data-t="egg" data-hold>egg</span>, <span class="inf" data-t="fish" data-hold>fish sauce</span></span></div>
+        <span class="tag">Ask first</span>
+      </li>
+      <li data-i="3" data-state="stop">
+        <span class="lf" aria-hidden="true"></span>
+        <div><b>Margherita pizza</b><span class="ings"><span class="hit" data-t="gluten">dough</span>, <span data-t="dairy">mozzarella</span>, <span data-t="">tomato</span>, <span data-t="" data-hold>basil</span></span></div>
+        <span class="tag">Skip</span>
+      </li>
+      <li data-i="4" data-state="stop">
+        <span class="lf" aria-hidden="true"></span>
+        <div><b>Chicken satay</b><span class="ings"><span data-t="meat">chicken</span>, <span class="hit" data-t="nuts">peanut sauce</span>, <span data-t="" data-hold>cucumber</span></span></div>
+        <span class="tag">Skip</span>
+      </li>
+    </ul>
+    <ul class="legend" aria-label="What the labels mean">
+      <li><i class="d go" aria-hidden="true"></i><b>Greenlit</b> nothing conflicts</li>
+      <li><i class="d ask" aria-hidden="true"></i><b>Ask first</b> kitchen can hold it</li>
+      <li><i class="d stop" aria-hidden="true"></i><b>Skip</b> built around it</li>
+    </ul>
+    <p class="demo-note">Underlined: flagged by your profile. Italic: not printed on the menu, so Greenlit infers it.</p>
+    <p class="demo-status sr-only" role="status"></p>
+  </section>
 
-  <h2>How it works</h2>
   <ol class="steps">
-    <li><strong>Snap the menu.</strong> Take photos of each page, or share menu photos and PDFs into Greenlit from any app.</li>
-    <li><strong>It’s read once.</strong> AI turns the menu into dishes and ingredients, including the ones the menu doesn’t print, like fish sauce in a pad thai.</li>
-    <li><strong>Sorted on your phone.</strong> Your diets and allergies are applied on your device. Change them and every saved menu re-sorts instantly, with no rescan.</li>
+    <li>
+      <svg class="ico" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10V6a2 2 0 0 1 2-2h4M18 4h4a2 2 0 0 1 2 2v4M24 18v4a2 2 0 0 1-2 2h-4M10 24H6a2 2 0 0 1-2-2v-4"/><circle cx="14" cy="14" r="3.6"/></svg>
+      <b>Snap</b><span>Photograph each page, or share menu photos and PDFs in from any app.</span>
+    </li>
+    <li>
+      <svg class="ico" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="4" width="16" height="20" rx="3"/><path d="M10.5 10h7M10.5 14h7M10.5 18h4"/></svg>
+      <b>Read</b><span>AI turns the menu into dishes and ingredients, even the unprinted ones.</span>
+    </li>
+    <li>
+      <svg class="ico" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="7.5" cy="8" r="2.2" fill="var(--go)" stroke="none"/><path d="M13 8h9"/><circle cx="7.5" cy="14" r="2.2" fill="var(--ask)" stroke="none"/><path d="M13 14h9"/><circle cx="7.5" cy="20" r="2.2" fill="var(--stop)" stroke="none"/><path d="M13 20h6"/></svg>
+      <b>Sort</b><span>Your diets apply on your phone. Change them and every saved menu re-sorts, no rescan.</span>
+    </li>
   </ol>
 
-  <div class="card">
-    <h3>Your profile stays yours</h3>
-    <p>Your diets, allergies and food preferences never leave your phone. There’s no account, no ad tracking, and no location access. The menu photos are sent off to be read and aren’t kept by us. Read the <a href="/greenlit/privacy/">privacy policy</a> for the details.</p>
-  </div>
+  <section class="promise" aria-labelledby="promise-h">
+    <h2 id="promise-h">Your profile stays yours.</h2>
+    <div class="where">
+      <div class="where-col">
+        <h3><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="3" width="10" height="18" rx="2.5"/><path d="M11 18h2"/></svg>Stays on your phone</h3>
+        <ul class="stays">
+          <li>Your diets and allergies</li>
+          <li>Foods you love or avoid</li>
+          <li>Scan history and menu photos</li>
+        </ul>
+      </div>
+      <div class="where-col">
+        <h3><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg>Leaves your phone</h3>
+        <ul class="leaves">
+          <li>Menu photos, sent to be read. We don’t keep them.</li>
+          <li>Basic usage and crash data, tied to a random ID, not to you</li>
+          <li>Restaurant names you type, to suggest places (Apple Maps)</li>
+        </ul>
+      </div>
+    </div>
+    <p class="muted">No account, no ad tracking, no location. <a href="/greenlit/privacy/">Privacy policy</a></p>
+  </section>
 
   <div class="callout">
-    <p><strong>A guide, not a guarantee.</strong> Greenlit uses AI to read menus, so it can misread a dish or miss an ingredient, and it can’t see what happens in a kitchen, such as cross-contamination. If you have an allergy, always confirm with the restaurant before you order.</p>
+    <p><strong>A guide, not a guarantee.</strong> Greenlit uses AI to read menus, so it can misread a dish or miss an ingredient, and it can’t see cross-contamination in a kitchen. With an allergy, always confirm with the restaurant before you order.</p>
   </div>
-
-  <p><a href="/greenlit/support/">Support</a> · <a href="/greenlit/privacy/">Privacy</a> · <a href="/greenlit/terms/">Terms</a></p>
 </main>
 
 <footer class="site-footer"><div class="wrap">
-  <p><a href="/greenlit/">Greenlit</a><a href="/greenlit/support/">Support</a><a href="/greenlit/privacy/">Privacy</a><a href="/greenlit/terms/">Terms</a></p>
+  <nav aria-label="Footer"><a href="/greenlit/">Greenlit</a><a href="/greenlit/support/">Support</a><a href="/greenlit/privacy/">Privacy</a><a href="/greenlit/terms/">Terms</a><a href="/lucky/">Play</a></nav>
+  <div class="theme" data-theme-slot></div>
   <p>© 2026 Four Leaf</p>
 </div></footer>
 </body>
