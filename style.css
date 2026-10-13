@@ -395,7 +395,7 @@ th { font-weight: 700; font-size: .82rem; letter-spacing: .06em; text-transform:
 .patch-grid button.found { color: var(--green); transform: scale(1.5); z-index: 1; }
 .patch-grid.done button:not(.found) { pointer-events: none; opacity: 0; transform: translate(var(--gx, 120px), var(--gy, -40px)) rotate(var(--gr, 240deg)); transition: transform .9s cubic-bezier(.5, 0, .9, .5) var(--d, 0ms), opacity .7s ease-in var(--d, 0ms); }
 .patch-more { margin: .75rem 0 0; }
-.patch-more a { display: inline-flex; align-items: center; gap: .3rem; min-height: 44px; font-weight: 600; }
+.patch-more a { display: inline-block; padding: .6rem 0; font-weight: 600; }
 .patch-more a:hover .arrow { transform: translateX(4px); }
 .patch-msg { min-height: 1.6rem; margin: .9rem 0 0; color: var(--muted); }
 .patch-msg strong { color: var(--text); }
@@ -469,6 +469,7 @@ th { font-weight: 700; font-size: .82rem; letter-spacing: .06em; text-transform:
 
 /* ---- 404 --------------------------------------------------------------- */
 .lost { text-align: center; }
+.lost-path code { overflow-wrap: anywhere; }
 .lost .lede { margin-inline: auto; }
 .lost .patch { display: block; }
 
@@ -500,6 +501,10 @@ th { font-weight: 700; font-size: .82rem; letter-spacing: .06em; text-transform:
 .button:active { transform: scale(.97); }
 .chip:active { transform: scale(.96); }
 .totop:active { transform: scale(.95); }
+
+/* a deep-linked section or answer flashes once so you can see where you landed */
+.prose h2:target, .faq details:target { animation: land 2s ease-out; }
+@keyframes land { 0%, 35% { background: var(--tint); box-shadow: 0 0 0 .5rem var(--tint); border-radius: 8px; } 100% { background: transparent; box-shadow: 0 0 0 .5rem transparent; } }
 
 /* ---- motion ---------------------------------------------------------- */
 @keyframes rise { from { opacity: 0; transform: translateY(6px); } }
@@ -537,7 +542,7 @@ th { font-weight: 700; font-size: .82rem; letter-spacing: .06em; text-transform:
 }
 
 @media print {
-  .site-header nav, .site-footer nav, .patch, .skip, .totop, .toc, .toc-side, .anchor, .theme, .button.ghost, .game { display: none; }
+  .site-header nav, .site-footer nav, .patch, .skip, .totop, .toc, .toc-side, .anchor, .theme, .faq-tools, .button.ghost, .game { display: none; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
   body { background: #fff; color: #000; }
   .button { min-height: 0; padding: 0; background: none; color: #000; text-decoration: underline; }

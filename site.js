@@ -612,6 +612,10 @@
     sync();
   }
 
+  // The 404 page says which address wasn't found.
+  const lost = $('[data-path]');
+  if (lost && location.pathname !== '/404.html') { lost.textContent = location.pathname; lost.closest('p').hidden = false; }
+
   /* ---- small touches ----------------------------------------------------- */
   // A link to #some-question opens that FAQ item.
   function openFromHash() {

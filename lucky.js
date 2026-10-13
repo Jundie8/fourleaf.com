@@ -16,7 +16,7 @@
     meadow: $('[data-meadow]'), msg: $('.game-msg'), round: $('[data-round]'), time: $('[data-time]'),
     best: $('[data-best]'), luck: $('[data-luck]'), hint: $('[data-hint]'), next: $('[data-next]'),
     again: $('[data-again]'), share: $('[data-share]'), modes: [...root.querySelectorAll('[data-mode]')],
-    announce: $('[data-announce]'),
+    announce: $('[data-announce]'), forget: $('[data-forget]'),
   };
   const kRound = el.round.previousElementSibling;
   const kBest = el.best.previousElementSibling;
@@ -311,6 +311,16 @@
     setMode(b.dataset.mode);
     focusMeadow();
   }));
+
+  el.forget.addEventListener('click', () => {
+    try { localStorage.removeItem(KEY); localStorage.removeItem(DAILY_KEY); } catch (e) { /* nothing was stored */ }
+    best.round = 0;
+    best.time = 0;
+    daily = null;
+    if (s.mode === 'daily' && el.meadow.hidden) setMode('endless'); // today's result is gone, so today's meadow is open again
+    paint();
+    say('Your scores are forgotten. Nothing is kept on this device now.');
+  });
 
   el.announce.addEventListener('change', () => {
     announce = el.announce.checked;
