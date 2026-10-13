@@ -93,7 +93,7 @@
 
     grid.addEventListener('click', e => {
       const b = e.target.closest('button');
-      if (!b || done) return;
+      if (!b || done || b.classList.contains('miss')) return;
       tries++;
       if (b === grid.children[target]) {
         done = true;
@@ -323,7 +323,9 @@
   /* ---- small touches ----------------------------------------------------- */
   // A link to #some-question opens that FAQ item.
   function openFromHash() {
-    const el = location.hash.length > 1 && document.getElementById(decodeURIComponent(location.hash.slice(1)));
+    let id = location.hash.slice(1);
+    try { id = decodeURIComponent(id); } catch (e) { return; } // a malformed hash is just ignored
+    const el = id && document.getElementById(id);
     if (el && el.tagName === 'DETAILS') el.open = true;
   }
   addEventListener('hashchange', openFromHash);

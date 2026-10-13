@@ -279,7 +279,6 @@ a:hover > .arrow, .card:hover .arrow { transform: translateX(4px); }
 .faq details[open] > :not(summary) { animation: rise .35s var(--ease); }
 
 /* ---- legal pages ------------------------------------------------------ */
-.page-head { margin-bottom: 1.5rem; }
 .prose h2 { margin-top: 2.75rem; scroll-margin-top: 1rem; }
 .prose h2 + p { margin-top: .4rem; }
 .toc { margin: 1.5rem 0 0; border-radius: 16px; background: var(--surface); padding: 0 1.1rem; }
@@ -292,7 +291,6 @@ a:hover > .arrow, .card:hover .arrow { transform: translateX(4px); }
 table { border-collapse: collapse; width: 100%; font-size: .95rem; }
 th, td { text-align: left; padding: .7rem .8rem .7rem 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
 th { font-weight: 700; font-size: .82rem; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
-.crosslinks { margin-top: 3rem; color: var(--muted); }
 
 /* ---- the lucky patch: find the four-leaf one ---------------------------- */
 .patch { display: none; margin-top: clamp(3rem, 8vw, 4.5rem); text-align: center; }
