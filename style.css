@@ -129,9 +129,18 @@ th, td { text-align: left; padding: .6rem .65rem; border-bottom: 1px solid var(-
 th { font-weight: 700; }
 code { font-size: .9em; background: var(--surface); padding: .1em .35em; border-radius: 4px; border: 1px solid var(--rule); }
 
-/* clover mark: leaves taken from the app's palette; "ghost" leaves are products to come */
-.leaf-on { fill: var(--green); }
-.leaf-off { fill: var(--surface); stroke: var(--ghost); stroke-width: 1.6; stroke-dasharray: 3 3; }
+/* clover mark: leaves taken from the app's palette; "ghost" leaves are products to come.
+   Each leaf is a radio, so picking one lights it and unlights the rest with no script;
+   the radio group also gives arrow-key selection and a screen-reader name for free. */
+.mark { position: relative; }
+.mark label, .mark svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.mark .defs { width: 0; height: 0; }
+.mark input { position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0; outline: none; }
+.mark .leaf { fill: var(--surface); stroke: var(--ghost); stroke-width: 1.6; stroke-dasharray: 3 3; pointer-events: visiblePainted; cursor: pointer; }
+.mark input:not(:checked) + svg .leaf:hover { stroke: var(--green); }
+.mark input:checked + svg .leaf { fill: var(--green); stroke: none; }
+.mark input:focus-visible + svg .leaf { stroke: var(--text); stroke-width: 2.4; stroke-dasharray: none; }
+@media (prefers-reduced-motion: no-preference) { .mark .leaf { transition: fill .18s ease, stroke .18s ease; } }
 
 @media (min-width: 40rem) {
   .hero { grid-template-columns: 1fr auto; align-items: center; gap: 2.5rem; }
