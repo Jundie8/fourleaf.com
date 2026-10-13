@@ -372,6 +372,10 @@ th { font-weight: 700; font-size: .82rem; letter-spacing: .06em; text-transform:
 }
 
 @media print {
-  .site-header nav, .site-footer nav, .patch, .skip, .totop { display: none; }
+  .site-header nav, .site-footer nav, .patch, .skip, .totop, .toc, .button.ghost { display: none; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
   body { background: #fff; color: #000; }
+  .button { min-height: 0; padding: 0; background: none; color: #000; text-decoration: underline; }
+  h2, h3 { break-after: avoid; }
+  details, tr, .callout, .card { break-inside: avoid; }
 }
