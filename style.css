@@ -109,7 +109,7 @@
 
 /* ---- base ------------------------------------------------------------ */
 * { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; scroll-padding-top: 1.5rem; }
+html { -webkit-text-size-adjust: 100%; scroll-padding-top: 1.5rem; scroll-padding-bottom: 5rem; } /* a focused control scrolls clear of the back-to-top button */
 body {
   margin: 0;
   min-height: 100vh;

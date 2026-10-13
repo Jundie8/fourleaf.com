@@ -1,6 +1,8 @@
-/* Four Leaf: the playful layer. Every page works without this file, and it
-   makes no network requests. It adds: the lucky patch (find the four-leaf
-   clover), the Greenlit diet demo, and a few small touches. */
+/* Four Leaf: the playful layer. Every page works without this file, and it makes
+   no network requests. It adds, where the page has the markup for it:
+   the clover (lean, spin, a ladybug), the lucky patch, the Greenlit diet demo,
+   the Auto/Light/Dark switch, a sticky index for the legal pages, the FAQ's
+   expand-all, copy-address, back-to-top, and a leaf rain if you type "luck". */
 (() => {
   'use strict';
 
