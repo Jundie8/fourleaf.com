@@ -240,7 +240,14 @@ code { font-size: .9em; background: var(--surface); padding: .1em .35em; border-
 .dishes [data-state="stop"] .tag { background: color-mix(in srgb, var(--stop) 14%, transparent); color: var(--stop-ink); }
 .dishes [data-state="stop"] .hit { text-decoration-color: var(--stop); }
 .dishes [data-state="stop"] b { color: var(--muted); }
-.demo-note { margin: .5rem 0 0; padding-top: .7rem; border-top: 1px solid var(--rule); color: var(--muted); font-size: .84rem; }
+.legend { display: flex; flex-wrap: wrap; gap: .35rem 1.1rem; margin: .85rem 0 0; padding: 0; list-style: none; color: var(--muted); font-size: .86rem; }
+.legend li { display: flex; align-items: center; gap: .4rem; margin: 0; }
+.legend b { color: var(--text); }
+.legend .d { flex: none; width: .6rem; height: .6rem; border-radius: 50%; }
+.legend .go { background: var(--go); }
+.legend .ask { background: var(--ask); }
+.legend .stop { background: var(--stop); }
+.demo-note { margin: .7rem 0 0; padding-top: .7rem; border-top: 1px solid var(--rule); color: var(--muted); font-size: .84rem; }
 
 .steps { list-style: none; padding: 0; margin: clamp(2.5rem, 7vw, 3.5rem) 0 0; display: grid; gap: 1.75rem; }
 .steps li { margin: 0; }
