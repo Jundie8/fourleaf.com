@@ -307,6 +307,50 @@
     document.documentElement.addEventListener('mouseleave', rest);
   }
 
+  /* ---- drag the clover to spin it; let go and it coasts ----------------------- */
+  function spin(root) {
+    if (calm()) return;
+    const box = $('.clover-box', root);
+    let angle = 0, velocity = 0, down = null, moved = false, frame = 0, lastX = 0, lastT = 0;
+    const set = a => { angle = a; box.style.setProperty('--spin', a.toFixed(1) + 'deg'); };
+
+    function coast() {
+      velocity *= 0.94;
+      set(angle + velocity);
+      frame = Math.abs(velocity) > 0.05 ? requestAnimationFrame(coast) : 0;
+    }
+    box.addEventListener('pointerdown', e => {
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      cancelAnimationFrame(frame);
+      down = { x: e.clientX, id: e.pointerId };
+      moved = false;
+      lastX = e.clientX;
+      lastT = performance.now();
+      velocity = 0;
+    });
+    box.addEventListener('pointermove', e => {
+      if (!down || e.pointerId !== down.id) return;
+      if (!moved && Math.abs(e.clientX - down.x) < 6) return; // a tap or a click is not a drag
+      if (!moved) { moved = true; box.setPointerCapture(e.pointerId); box.classList.add('spinning'); }
+      const dx = e.clientX - lastX;
+      const now = performance.now();
+      velocity = Math.max(-26, Math.min(26, (dx * 0.8) / Math.max(1, (now - lastT) / 16)));
+      set(angle + dx * 0.8);
+      lastX = e.clientX;
+      lastT = now;
+    });
+    const end = e => {
+      if (!down || e.pointerId !== down.id) return;
+      down = null;
+      box.classList.remove('spinning');
+      if (moved && Math.abs(velocity) > 0.3) frame = requestAnimationFrame(coast);
+    };
+    box.addEventListener('pointerup', end);
+    box.addEventListener('pointercancel', end);
+    // a drag must not also pick the leaf under the finger
+    box.addEventListener('click', e => { if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; } }, true);
+  }
+
   /* ---- a ladybug wanders the clover; poke it and it flies off --------------- */
   function ladybug(root) {
     if (calm()) return;
@@ -470,6 +514,57 @@
     apply(read());
   }
 
+  /* ---- legal pages: section links, and a sticky "you are here" index on wide screens ---- */
+  function legal() {
+    const main = $('main.prose');
+    if (!main) return;
+    const heads = $$('h2[id]', main);
+    const names = new Map(heads.map(h => [h.id, h.textContent.trim()]));
+
+    heads.forEach(h => {
+      h.tabIndex = -1; // so a jump can land focus on the section for screen readers
+      const a = document.createElement('a');
+      a.className = 'anchor';
+      a.href = '#' + h.id;
+      a.setAttribute('aria-label', `Link to “${names.get(h.id)}”`);
+      a.textContent = '#';
+      h.appendChild(a);
+    });
+    const land = () => { const h = heads.find(x => '#' + x.id === decodeURI(location.hash)); if (h) h.focus({ preventScroll: true }); };
+    addEventListener('hashchange', land);
+
+    const toc = $('.toc', main);
+    if (!toc || heads.length < 3) return;
+    const side = document.createElement('nav');
+    side.className = 'toc-side';
+    side.setAttribute('aria-label', 'On this page');
+    side.innerHTML = '<div class="toc-side-inner"><p class="toc-title">On this page</p><ol></ol></div>';
+    const ol = $('ol', side);
+    heads.forEach(h => {
+      const li = document.createElement('li');
+      const a = document.createElement('a');
+      a.href = '#' + h.id;
+      a.textContent = names.get(h.id);
+      li.appendChild(a);
+      ol.appendChild(li);
+    });
+    toc.after(side);
+
+    const links = $$('a', side);
+    let queued = false;
+    function spy() {
+      queued = false;
+      let current = null;
+      for (const h of heads) { if (h.getBoundingClientRect().top <= 150) current = h; else break; }
+      links.forEach(a => {
+        if (current && a.getAttribute('href') === '#' + current.id) a.setAttribute('aria-current', 'location');
+        else a.removeAttribute('aria-current');
+      });
+    }
+    addEventListener('scroll', () => { if (!queued) { queued = true; requestAnimationFrame(spy); } }, { passive: true });
+    spy();
+  }
+
   /* ---- small touches ----------------------------------------------------- */
   // A link to #some-question opens that FAQ item.
   function openFromHash() {
@@ -485,9 +580,11 @@
   $$('[data-patch]').forEach(patch);
   $$('[data-demo]').forEach(demo);
   $$('.clover').forEach(lean);
+  $$('.clover').forEach(spin);
   $$('.clover').forEach(ladybug);
   $$('[data-copy]').forEach(copyButton);
   theme();
+  legal();
   toTop();
   openFromHash();
 

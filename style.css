@@ -43,6 +43,7 @@
   --leaf: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-15 -34 30 35'%3E%3Cpath d='M0 0C-2-4-14-12-14-22C-14-29-9-33-5-33C-2-33 0-31 0-28C0-31 2-33 5-33C9-33 14-29 14-22C14-12 2-4 0 0Z'/%3E%3C/svg%3E");
   /* four of them, as a mask: tiny decorative marker (a lone leaf at this size reads as a heart) */
   --clover: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-35 -35 70 70'%3E%3Cpath d='M0 0C-2-4-14-12-14-22C-14-29-9-33-5-33C-2-33 0-31 0-28C0-31 2-33 5-33C9-33 14-29 14-22C14-12 2-4 0 0Z' transform='rotate(0)'/%3E%3Cpath d='M0 0C-2-4-14-12-14-22C-14-29-9-33-5-33C-2-33 0-31 0-28C0-31 2-33 5-33C9-33 14-29 14-22C14-12 2-4 0 0Z' transform='rotate(90)'/%3E%3Cpath d='M0 0C-2-4-14-12-14-22C-14-29-9-33-5-33C-2-33 0-31 0-28C0-31 2-33 5-33C9-33 14-29 14-22C14-12 2-4 0 0Z' transform='rotate(180)'/%3E%3Cpath d='M0 0C-2-4-14-12-14-22C-14-29-9-33-5-33C-2-33 0-31 0-28C0-31 2-33 5-33C9-33 14-29 14-22C14-12 2-4 0 0Z' transform='rotate(270)'/%3E%3C/svg%3E");
+  --arrow-out: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4.5 11.5l7-7M6 4.5h5.5V10' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
   --check: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.2 8.6l3 3L12.8 5' fill='none' stroke='black' stroke-width='2.3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
 }
 
@@ -202,8 +203,10 @@ code { font-size: .9em; background: var(--surface); padding: .1em .35em; border-
 .clover label svg { width: 100%; height: 100%; overflow: visible; }
 .clover input { position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0; pointer-events: none; }
 
-.lg { --y: -2px; --s: 1.5; transform: rotate(var(--r)) translateY(calc(var(--y) + var(--lean, 0px))) scale(var(--s)); transition: transform .45s var(--spring); }
+.lg { --y: -2px; --s: 1.5; transform: rotate(calc(var(--r) + var(--spin, 0deg))) translateY(calc(var(--y) + var(--lean, 0px))) scale(var(--s)); transition: transform .45s var(--spring); }
 .clover input:checked + svg .lg { --y: -6px; --s: 1.58; }
+.clover-box.spinning .lg { transition: none; }
+.clover-box { touch-action: pan-y; }
 .leaf { fill: var(--surface); stroke: var(--edge); stroke-width: 1.5; stroke-dasharray: 3 3; pointer-events: visiblePainted; cursor: pointer; transition: fill .25s, stroke .25s; }
 .clover input:checked + svg .leaf { fill: var(--tint); fill: color-mix(in srgb, var(--green) 20%, var(--bg)); stroke: var(--green); stroke-width: 2; stroke-dasharray: none; }
 .clover input.live + svg .leaf { fill: var(--green); stroke: none; }
@@ -314,6 +317,15 @@ code { font-size: .9em; background: var(--surface); padding: .1em .35em; border-
 
 .promise { margin-top: clamp(2.5rem, 7vw, 3.5rem); }
 .promise h2 { margin-top: 0; }
+.where { display: grid; gap: .75rem; margin: 1rem 0 .75rem; }
+.where-col { padding: 1rem 1.15rem; border-radius: 16px; background: var(--surface); }
+.where h3 { display: flex; align-items: center; gap: .55rem; margin: 0 0 .4rem; font-size: 1rem; }
+.where h3 svg { flex: none; width: 22px; height: 22px; fill: none; stroke: var(--green-deep); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.where ul { list-style: none; margin: 0; padding: 0; }
+.where li { position: relative; margin: .35rem 0; padding-left: 1.5rem; color: var(--muted); font-size: .95rem; line-height: 1.45; }
+.where li::before { content: ""; position: absolute; left: 0; top: .2rem; width: 1rem; height: 1rem; background: var(--green-deep); -webkit-mask: var(--check) center / contain no-repeat; mask: var(--check) center / contain no-repeat; }
+.where .leaves li::before { background: var(--edge); -webkit-mask-image: var(--arrow-out); mask-image: var(--arrow-out); }
+@media (min-width: 40rem) { .where { grid-template-columns: 1fr 1fr; } }
 
 /* ---- support: the FAQ ------------------------------------------------ */
 .faq { margin-top: 2.5rem; border-top: 1px solid var(--rule); }
@@ -333,6 +345,22 @@ code { font-size: .9em; background: var(--surface); padding: .1em .35em; border-
 .toc ol { margin: 0 0 .5rem; padding: 0; list-style: none; columns: 2 14rem; column-gap: 1.5rem; }
 .toc li { margin: 0; break-inside: avoid; }
 .toc a { display: flex; align-items: center; min-height: 44px; color: var(--text); text-decoration: none; font-size: .95rem; }
+/* section links and the wide-screen index */
+.prose { position: relative; }
+.prose h2:focus { outline: none; }
+.anchor { margin-left: .2rem; padding: .2rem .5rem; color: var(--edge); font-weight: 600; text-decoration: none; opacity: .55; transition: opacity .2s, color .2s; }
+.anchor:focus-visible { opacity: 1; color: var(--green-deep); }
+.toc-side { display: none; }
+@media (min-width: 80rem) {
+  .js .prose .toc { display: none; }
+  .js .toc-side { display: block; position: absolute; top: 0; bottom: 0; left: -14.5rem; width: 12.5rem; }
+  .toc-side-inner { position: sticky; top: 1.5rem; max-height: calc(100vh - 3rem); max-height: calc(100dvh - 3rem); overflow-y: auto; padding-right: .5rem; }
+  .toc-title { margin: 0 0 .5rem; color: var(--muted); font-size: .72rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+  .toc-side ol { margin: 0; padding: 0; list-style: none; border-left: 2px solid var(--rule); }
+  .toc-side li { margin: 0; }
+  .toc-side a { display: block; margin-left: -2px; padding: .35rem 0 .35rem .8rem; border-left: 2px solid transparent; color: var(--muted); font-size: .85rem; line-height: 1.35; text-decoration: none; transition: color .2s, border-color .2s; }
+  .toc-side a[aria-current="location"] { border-left-color: var(--green); color: var(--text); font-weight: 700; }
+}
 .table-scroll { overflow-x: auto; margin: 1rem 0; }
 table { border-collapse: collapse; width: 100%; font-size: .95rem; }
 th, td { text-align: left; padding: .7rem .8rem .7rem 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
@@ -417,6 +445,9 @@ th { font-weight: 700; font-size: .82rem; letter-spacing: .06em; text-transform:
 
 /* hover effects only where a pointer can really hover (no sticky hover after a tap) */
 @media (hover: hover) {
+  .anchor { opacity: 0; }
+  .prose h2:hover .anchor { opacity: 1; }
+  .toc-side a:hover { color: var(--text); }
   .chip-x:hover { color: var(--stop-ink); }
   .meadow button:not(.miss):not(.found):not(.reveal):hover { color: var(--green); }
   .meadow button:not(.miss):not(.found):not(.reveal):hover svg { --hv: 1.2; }
@@ -444,7 +475,7 @@ th { font-weight: 700; font-size: .82rem; letter-spacing: .06em; text-transform:
 /* ---- motion ---------------------------------------------------------- */
 @keyframes rise { from { opacity: 0; transform: translateY(6px); } }
 @keyframes bloom { from { opacity: 0; transform: rotate(var(--r)) translateY(0) scale(.1); } }
-@keyframes sway { 0%, 100% { transform: rotate(-2.5deg); } 50% { transform: rotate(2.5deg); } }
+@keyframes sway { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(2.5deg); } 75% { transform: rotate(-2.5deg); } }
 @keyframes nudge { 45% { transform: rotate(var(--r)) translateY(-9px) scale(1.58); } }
 @keyframes wiggle { 25% { transform: rotate(-12deg) scale(.9); } 75% { transform: rotate(12deg) scale(.9); } }
 @media (prefers-reduced-motion: no-preference) {
@@ -456,7 +487,7 @@ th { font-weight: 700; font-size: .82rem; letter-spacing: .06em; text-transform:
   /* once the clover has bloomed, the empty leaves wave hello so touch users know they can be tapped */
   .clover-box label:nth-of-type(n+2) .lg { animation: bloom .8s var(--spring) calc(var(--i, 0) * 110ms + 150ms) backwards, nudge .8s ease-in-out calc(2.4s + var(--i, 0) * 160ms) 1; }
 
-  .clover-box { animation: sway 8s ease-in-out 1.4s infinite; transform-origin: 50% 42%; }
+  .clover-box { animation: sway 6s ease-in-out 1.4s 3; transform-origin: 50% 42%; }
   .patch-grid button.miss { animation: wiggle .4s; }
   .slot .cap { animation: rise .4s var(--ease); }
   @view-transition { navigation: auto; }
@@ -477,7 +508,7 @@ th { font-weight: 700; font-size: .82rem; letter-spacing: .06em; text-transform:
 }
 
 @media print {
-  .site-header nav, .site-footer nav, .patch, .skip, .totop, .toc, .theme, .button.ghost, .game { display: none; }
+  .site-header nav, .site-footer nav, .patch, .skip, .totop, .toc, .toc-side, .anchor, .theme, .button.ghost, .game { display: none; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
   body { background: #fff; color: #000; }
   .button { min-height: 0; padding: 0; background: none; color: #000; text-decoration: underline; }
