@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>The lucky meadow — Four Leaf</title>
+<meta name="description" content="A tiny game: one clover in the meadow has four leaves. Find it before your luck runs out.">
+<meta name="theme-color" content="#fff8ec" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1a1814" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="canonical" href="https://tryfourleaf.com/lucky/">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Four Leaf">
+<meta property="og:title" content="The lucky meadow — Four Leaf">
+<meta property="og:description" content="A tiny game: one clover in the meadow has four leaves. Find it before your luck runs out.">
+<meta property="og:url" content="https://tryfourleaf.com/lucky/">
+<meta property="og:image" content="https://tryfourleaf.com/og-lucky.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The lucky meadow: find the one clover with four leaves.">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="stylesheet" href="/style.css?v=57b64670">
+<script>document.documentElement.classList.add('js');try{var t=localStorage.getItem('fl-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}</script>
+<script src="/site.js?v=591e172b" defer></script>
+<script src="/lucky.js?v=ed7c09d8" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header"><div class="wrap">
+  <a class="brand" href="/"><img src="/favicon.svg" width="30" height="30" alt="">Four Leaf</a>
+  <nav aria-label="Main"><a href="/greenlit/">Greenlit</a><a href="/greenlit/support/">Support</a></nav>
+</div></header>
+
+<main id="main" tabindex="-1" class="wrap">
+  <div class="hero">
+    <p class="eyebrow">A little game</p>
+    <h1>The lucky meadow</h1>
+    <p class="lede">One clover has four leaves. Find it before your luck runs out.</p>
+  </div>
+
+  <p class="nojs-only muted center-text">This little game needs JavaScript. The rest of the site doesn’t.</p>
+
+  <section class="game" data-game aria-label="The lucky meadow">
+    <div class="hud" role="group" aria-label="Game status">
+      <div class="stat"><span class="k">Round</span><b class="v" data-round>1</b></div>
+      <div class="stat"><span class="k">Luck</span><span class="luck" data-luck role="img" aria-label="Luck: 3 of 3"></span></div>
+      <div class="stat"><span class="k">Time</span><b class="v" data-time aria-hidden="true">0.0</b></div>
+      <div class="stat"><span class="k">Best</span><b class="v" data-best>–</b></div>
+    </div>
+
+    <div class="meadow" data-meadow role="group" aria-label="The meadow. One clover has four leaves."></div>
+    <p class="game-msg" role="status" aria-live="polite"></p>
+
+    <div class="actions game-actions">
+      <button type="button" class="button ghost" data-hint>Hint</button>
+      <button type="button" class="button" data-next hidden>Next round <span class="arrow" aria-hidden="true">→</span></button>
+      <button type="button" class="button" data-again hidden>Play again</button>
+      <button type="button" class="button ghost" data-share hidden>Share</button>
+    </div>
+
+    <div class="faq">
+      <details>
+        <summary>How to play</summary>
+        <ul>
+          <li>Most clovers have three leaves. Find the one with four.</li>
+          <li>Each wrong pick wilts a leaf of luck. Out of luck, and the run ends.</li>
+          <li>A clean find, with no misses, grows a leaf back.</li>
+          <li>One hint per round. Each round the meadow gets fuller, and rarer decoys turn up.</li>
+          <li>On a keyboard, the arrow keys move around the meadow and Enter picks.</li>
+        </ul>
+      </details>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer"><div class="wrap">
+  <nav aria-label="Footer"><a href="/greenlit/">Greenlit</a><a href="/greenlit/support/">Support</a><a href="/greenlit/privacy/">Privacy</a><a href="/greenlit/terms/">Terms</a><a href="/lucky/" aria-current="page">Play</a></nav>
+  <p>© 2026 Four Leaf</p>
+</div></footer>
+</body>
+</html>

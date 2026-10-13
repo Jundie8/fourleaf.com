@@ -37,6 +37,21 @@
     }
   }
 
+  /* The wind takes everything that wasn't lucky, nearest first. */
+  function blowAway(grid, found) {
+    const items = [...grid.children];
+    const cols = getComputedStyle(grid).gridTemplateColumns.split(' ').length;
+    const at = items.indexOf(found);
+    items.forEach((b, i) => {
+      if (b === found) return;
+      const d = Math.hypot((i % cols) - (at % cols), Math.floor(i / cols) - Math.floor(at / cols));
+      b.style.setProperty('--d', Math.round(d * 40) + 'ms');
+      b.style.setProperty('--gx', 70 + Math.random() * 170 + 'px');
+      b.style.setProperty('--gy', -140 + Math.random() * 210 + 'px');
+      b.style.setProperty('--gr', 120 + Math.random() * 320 + 'deg');
+    });
+  }
+
   /* ---- the lucky patch -------------------------------------------------- */
   // Finding the lucky clover turns the tab icon gold until you play again.
   const icon = $('link[rel="icon"]');
@@ -69,7 +84,7 @@
     const again = $('.patch-again', root);
     const home = $('.patch-home', root);
     const nope = ['Just three leaves.', 'Not that one.', 'So close. Not quite.', 'Keep looking.', 'Three leaves. Try again.'];
-    let target, tries, done;
+    let target, tries, done, lastDist;
 
     function play() {
       grid.replaceChildren();
@@ -77,6 +92,7 @@
       target = Math.floor(Math.random() * N);
       tries = 0;
       done = false;
+      lastDist = null;
       msg.textContent = '';
       again.hidden = true;
       lucky(false);
@@ -100,6 +116,7 @@
         b.classList.add('found');
         b.setAttribute('aria-label', 'The four-leaf clover');
         grid.classList.add('done');
+        blowAway(grid, b);
         const r = b.getBoundingClientRect();
         burst(r.left + r.width / 2, r.top + r.height / 2);
         lucky(true);
@@ -109,8 +126,12 @@
         if (home) home.hidden = false;
       } else {
         b.classList.add('miss');
-        b.setAttribute('aria-label', `Clover ${[...grid.children].indexOf(b) + 1}, three leaves`);
-        msg.textContent = pick(nope);
+        const at = [...grid.children].indexOf(b);
+        b.setAttribute('aria-label', `Clover ${at + 1}, three leaves`);
+        // warmer / colder, measured in grid steps from the lucky one
+        const dist = Math.hypot((at % COLS) - (target % COLS), Math.floor(at / COLS) - Math.floor(target / COLS));
+        msg.textContent = lastDist === null ? pick(nope) : dist < lastDist * 0.85 ? 'Warmer.' : dist > lastDist * 1.15 ? 'Colder.' : 'Not that one.';
+        lastDist = dist;
       }
     });
 
@@ -346,6 +367,54 @@
     });
   }
 
+  /* ---- Auto / Light / Dark, remembered on this device ------------------------ */
+  function theme() {
+    const KEY = 'fl-theme';
+    const root = document.documentElement;
+    const footer = $('.site-footer .wrap');
+    if (!footer) return;
+    const metas = $$('meta[name="theme-color"]');
+    const originals = metas.map(m => m.content);
+    const bg = { light: '#fff8ec', dark: '#1a1814' };
+    const ICONS = {
+      auto: '<circle cx="12" cy="12" r="8"/><path class="fill" d="M12 4a8 8 0 0 1 0 16z"/>',
+      light: '<circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M18.4 5.6L17 7M7 17l-1.4 1.4"/>',
+      dark: '<path d="M20 14.5A8 8 0 1 1 9.5 4 6.5 6.5 0 0 0 20 14.5z"/>',
+    };
+    const LABELS = { auto: 'Match my device', light: 'Light', dark: 'Dark' };
+    const read = () => { try { const v = localStorage.getItem(KEY); return v === 'light' || v === 'dark' ? v : 'auto'; } catch (e) { return 'auto'; } };
+
+    const box = document.createElement('div');
+    box.className = 'theme';
+    box.setAttribute('role', 'group');
+    box.setAttribute('aria-label', 'Colour theme');
+    const buttons = Object.keys(ICONS).map(mode => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.dataset.mode = mode;
+      b.setAttribute('aria-label', LABELS[mode]);
+      b.title = LABELS[mode];
+      b.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true">${ICONS[mode]}</svg>`;
+      box.appendChild(b);
+      return b;
+    });
+
+    function apply(mode) {
+      if (mode === 'auto') root.removeAttribute('data-theme'); else root.dataset.theme = mode;
+      metas.forEach((m, i) => { m.content = mode === 'auto' ? originals[i] : bg[mode]; });
+      buttons.forEach(b => b.setAttribute('aria-pressed', String(b.dataset.mode === mode)));
+    }
+    box.addEventListener('click', e => {
+      const b = e.target.closest('button');
+      if (!b) return;
+      try { b.dataset.mode === 'auto' ? localStorage.removeItem(KEY) : localStorage.setItem(KEY, b.dataset.mode); } catch (err) { /* private mode: it still works for this visit */ }
+      apply(b.dataset.mode);
+    });
+    addEventListener('storage', e => { if (e.key === KEY) apply(read()); }); // another tab changed it
+    footer.insertBefore(box, footer.querySelector('p'));
+    apply(read());
+  }
+
   /* ---- small touches ----------------------------------------------------- */
   // A link to #some-question opens that FAQ item.
   function openFromHash() {
@@ -363,8 +432,12 @@
   $$('.clover').forEach(lean);
   $$('.clover').forEach(ladybug);
   $$('[data-copy]').forEach(copyButton);
+  theme();
   toTop();
   openFromHash();
+
+  // lucky.js (the game page) borrows these
+  window.fourleaf = { NS, LEAF, calm, burst };
 
   console.log('%c Four Leaf %c small apps, made with care. Found a bug? support@tryfourleaf.com', 'background:#047857;color:#fff;border-radius:6px;padding:2px 6px;font-weight:700', '');
 })();
