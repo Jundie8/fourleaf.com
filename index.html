@@ -5,49 +5,60 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Four Leaf — small apps, made with care</title>
 <meta name="description" content="Four Leaf makes focused apps for everyday problems. Our first: Greenlit, a dietary menu scanner for iPhone.">
-<meta name="theme-color" content="#047857">
+<meta name="theme-color" content="#fff8ec" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1a1814" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="/style.css">
+<link rel="stylesheet" href="/style.css?v=e768ff56">
+<script>document.documentElement.classList.add('js')</script>
+<script src="/site.js?v=a671acd0" defer></script>
 </head>
 <body>
+<a class="skip" href="#main">Skip to content</a>
 <header class="site-header"><div class="wrap">
-  <a class="brand" href="/"><img src="/favicon.svg" width="28" height="28" alt="">Four Leaf</a>
+  <a class="brand" href="/"><img src="/favicon.svg" width="30" height="30" alt="">Four Leaf</a>
   <nav aria-label="Main"><a href="/greenlit/">Greenlit</a><a href="/greenlit/support/">Support</a></nav>
 </div></header>
 
-<main class="wrap">
-  <section class="hero">
-    <div>
-      <p class="eyebrow">Four Leaf</p>
-      <h1>Small apps, made with care.</h1>
-      <p class="lede">We build focused apps for everyday problems. Each one is a leaf: one idea, done properly, with your privacy in mind.</p>
-    </div>
-    <div class="mark" role="radiogroup" aria-label="A four-leaf clover. Pick a leaf to light it; Greenlit is the first.">
-      <svg class="defs" width="0" height="0" aria-hidden="true" focusable="false">
-        <defs>
-          <path id="leaf" d="M0 0 C-2 -4 -14 -12 -14 -22 C-14 -29 -9 -33 -5 -33 C-2 -33 0 -31 0 -28 C0 -31 2 -33 5 -33 C9 -33 14 -29 14 -22 C14 -12 2 -4 0 0 Z"/>
-        </defs>
-      </svg>
-      <label><input type="radio" name="leaf" aria-label="Leaf 1: Greenlit" checked><svg viewBox="0 0 100 100" aria-hidden="true"><g transform="translate(50 50) scale(1.3)"><use href="#leaf" class="leaf" transform="translate(0 -3)"/></g></svg></label>
-      <label><input type="radio" name="leaf" aria-label="Leaf 2"><svg viewBox="0 0 100 100" aria-hidden="true"><g transform="translate(50 50) scale(1.3)"><use href="#leaf" class="leaf" transform="rotate(90) translate(0 -3)"/></g></svg></label>
-      <label><input type="radio" name="leaf" aria-label="Leaf 3"><svg viewBox="0 0 100 100" aria-hidden="true"><g transform="translate(50 50) scale(1.3)"><use href="#leaf" class="leaf" transform="rotate(180) translate(0 -3)"/></g></svg></label>
-      <label><input type="radio" name="leaf" aria-label="Leaf 4"><svg viewBox="0 0 100 100" aria-hidden="true"><g transform="translate(50 50) scale(1.3)"><use href="#leaf" class="leaf" transform="rotate(270) translate(0 -3)"/></g></svg></label>
-    </div>
-  </section>
+<main id="main" class="wrap hero">
+  <h1>Small apps, made with care.</h1>
+  <p class="lede">Focused apps for everyday problems. One idea per leaf, with your privacy in mind.</p>
 
-  <h2>Our apps</h2>
-  <div class="card">
-    <h3>Greenlit <span class="pill">Coming soon to the App Store</span></h3>
-    <p>A dietary menu scanner. Photograph a restaurant menu and see which dishes fit your diets and allergies, which need a tweak, and which to skip. Your diet profile never leaves your phone.</p>
-    <p><a href="/greenlit/">Learn more about Greenlit →</a></p>
+  <div class="clover" role="radiogroup" aria-label="A four-leaf clover. Pick a leaf to see what grows there.">
+    <svg class="defs" width="0" height="0" aria-hidden="true" focusable="false"><defs>
+      <path id="leaf" d="M0 0C-2-4-14-12-14-22C-14-29-9-33-5-33C-2-33 0-31 0-28C0-31 2-33 5-33C9-33 14-29 14-22C14-12 2-4 0 0Z"/>
+    </defs></svg>
+    <div class="clover-box">
+      <svg class="stem" viewBox="0 0 120 128" aria-hidden="true"><path d="M60 54C60 82 62 106 70 124"/></svg>
+      <label><input type="radio" name="leaf" id="lf1" class="live" aria-label="Leaf 1: Greenlit" aria-describedby="cap-1" checked><svg viewBox="0 0 120 128" aria-hidden="true"><g transform="translate(60 54)"><g class="lg" style="--r:0deg;--i:0"><use href="#leaf" class="leaf"/><path class="vein" d="M0-5V-24"/></g></g></svg></label>
+      <label><input type="radio" name="leaf" id="lf2" aria-label="Leaf 2: still growing" aria-describedby="cap-2"><svg viewBox="0 0 120 128" aria-hidden="true"><g transform="translate(60 54)"><g class="lg" style="--r:90deg;--i:1"><use href="#leaf" class="leaf"/><path class="vein" d="M0-5V-24"/></g></g></svg></label>
+      <label><input type="radio" name="leaf" id="lf3" aria-label="Leaf 3: still growing" aria-describedby="cap-3"><svg viewBox="0 0 120 128" aria-hidden="true"><g transform="translate(60 54)"><g class="lg" style="--r:180deg;--i:2"><use href="#leaf" class="leaf"/><path class="vein" d="M0-5V-24"/></g></g></svg></label>
+      <label><input type="radio" name="leaf" id="lf4" aria-label="Leaf 4: still growing" aria-describedby="cap-4"><svg viewBox="0 0 120 128" aria-hidden="true"><g transform="translate(60 54)"><g class="lg" style="--r:270deg;--i:3"><use href="#leaf" class="leaf"/><path class="vein" d="M0-5V-24"/></g></g></svg></label>
+    </div>
+
+    <div class="card slot">
+      <div class="cap cap-1" id="cap-1">
+        <h2>Greenlit <span class="pill">Coming soon to the App Store</span></h2>
+        <p class="muted">A dietary menu scanner. Photograph a menu and see which dishes fit you.</p>
+        <a class="cap-link" href="/greenlit/">Meet Greenlit <span class="arrow" aria-hidden="true">→</span></a>
+      </div>
+      <p class="cap cap-soft cap-2" id="cap-2"><strong>Still growing.</strong>Something is sprouting here.</p>
+      <p class="cap cap-soft cap-3" id="cap-3"><strong>Seed planted.</strong>Give it a season.</p>
+      <p class="cap cap-soft cap-4" id="cap-4"><strong>Waiting for the right idea.</strong>Good things take their time.</p>
+    </div>
   </div>
 
-  <h2>Get in touch</h2>
-  <p>Questions, feedback, or press: <a href="mailto:support@tryfourleaf.com">support@tryfourleaf.com</a>.</p>
+  <p class="hello">Say hello: <a href="mailto:support@tryfourleaf.com">support@tryfourleaf.com</a></p>
+
+  <section class="patch" data-patch aria-labelledby="patch-h">
+    <p id="patch-h" class="muted">One of these has four leaves.</p>
+    <div class="patch-grid" role="group" aria-label="Find the four-leaf clover"></div>
+    <p class="patch-msg" aria-live="polite"></p>
+    <div class="patch-actions"><button type="button" class="linklike patch-again" hidden>Play again</button></div>
+  </section>
 </main>
 
 <footer class="site-footer"><div class="wrap">
-  <p><a href="/greenlit/">Greenlit</a><a href="/greenlit/support/">Support</a><a href="/greenlit/privacy/">Privacy</a><a href="/greenlit/terms/">Terms</a></p>
+  <nav aria-label="Footer"><a href="/greenlit/">Greenlit</a><a href="/greenlit/support/">Support</a><a href="/greenlit/privacy/">Privacy</a><a href="/greenlit/terms/">Terms</a></nav>
   <p>© 2026 Four Leaf</p>
 </div></footer>
 </body>
