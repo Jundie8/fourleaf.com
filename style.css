@@ -132,8 +132,8 @@ img, svg { display: block; max-width: 100%; }
 .sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 
 .wrap { max-width: 44rem; margin: 0 auto; padding: 0 1.25rem; }
-.skip { position: absolute; left: 1rem; top: -4rem; z-index: var(--z-skip); padding: .65rem 1rem; border-radius: 10px; background: var(--raised); color: var(--text); box-shadow: var(--shadow); }
-.skip:focus { top: 1rem; }
+.skip { position: absolute; left: 1rem; top: -4rem; z-index: var(--z-skip); padding: .65rem 1rem; border-radius: 10px; background: var(--raised); color: var(--text); }
+.skip:focus { top: 1rem; box-shadow: var(--shadow); } /* no shadow while hidden, or it bleeds into view */
 
 /* ---- header / footer ------------------------------------------------- */
 .site-header { padding: .9rem 0; }
@@ -259,7 +259,7 @@ code { font-size: .9em; background: var(--surface); padding: .1em .35em; border-
 .own label { display: block; margin: 0 0 .35rem; color: var(--muted); font-size: .86rem; font-weight: 600; }
 .own-row { display: flex; gap: .5rem; }
 .own input { flex: 1; min-width: 0; min-height: 44px; padding: 0 1rem; border: 1.5px solid var(--edge); border-radius: 999px; background: var(--bg); color: var(--text); font: inherit; font-size: 1rem; }
-.own input::placeholder { color: var(--muted); opacity: .8; }
+.own input::placeholder { color: var(--muted); opacity: 1; }
 .own input:focus-visible { outline-offset: 2px; border-color: var(--green); }
 .chip.add { justify-content: center; padding: 0 1.1rem; background: var(--green-deep); border-color: var(--green-deep); color: var(--on-green); font-weight: 700; }
 .chip.add::before, .chip.add::after { display: none; }
