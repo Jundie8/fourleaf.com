@@ -121,7 +121,7 @@
   <p>When you name a menu or look for a restaurant, the text you type may be sent to Apple’s Maps search to suggest matching places. We don’t send your location, and the app doesn’t request it. Apple handles that search under <a href="https://www.apple.com/legal/privacy/" rel="noopener">its privacy policy</a>.</p>
 
   <h3>Your IP address</h3>
-  <p>Our scanning service sees the IP address your request comes from, as any internet service does. We use it to enforce a limit on scans per hour, so the service can’t be run up by abuse. For this the service keeps two counters, one for your install ID and one for the IP address (so that one network can’t be used to get around the per-install limit). Each is only a number and a time. Routine cleanup removes a counter once it has been idle for more than two hours; the cleanup runs when the service next handles a scan, so in a quiet period a counter can stay longer. The IP address isn’t joined to your scans or your usage events, and it isn’t shared. Our hosting provider may also keep its own standard infrastructure logs.</p>
+  <p>Our scanning service sees the IP address your request comes from, as any internet service does. We use it to enforce a limit on scans per hour, so the service can’t be run up by abuse. For this the service keeps two counters, one for your install ID and one for the IP address (so that one network can’t be used to get around the per-install limit). The IP address is not stored in its own counter: the service first scrambles it with a secret key that only it holds, and the counter is filed under that scrambled value, which can’t be turned back into your address. Each counter is only a number and a time. Routine cleanup removes a counter once it has been idle for more than two hours; the cleanup runs when the service next handles a scan, so in a quiet period a counter can stay longer. The IP address isn’t joined to your scans or your usage events, and it isn’t shared. Our hosting provider may also keep its own standard infrastructure logs.</p>
 
   <h2 id="what-we-don-t-do">What we don’t do</h2>
   <ul>
@@ -149,7 +149,7 @@
     <li><strong>Menu photos on your phone:</strong> up to 28 days, and for your 20 most recent scans; with Plus, up to a year, and for your 50 most recent scans.</li>
     <li><strong>Your iCloud copy, if you use iCloud Sync:</strong> until it is deleted as described under iCloud Sync. We have no access to it, so we can’t delete it for you.</li>
     <li><strong>Usage and crash events:</strong> kept for as long as they help us understand and improve the app. We don’t yet apply an automatic deletion schedule.</li>
-    <li><strong>Scan-limit counters (including IP addresses):</strong> removed once idle for more than two hours, at the next routine cleanup (see Your IP address above).</li>
+    <li><strong>Scan-limit counters (IP addresses only as a keyed hash):</strong> removed once idle for more than two hours, at the next routine cleanup (see Your IP address above).</li>
     <li><strong>On your device:</strong> as described above, or until you delete them or the app.</li>
   </ul>
 
